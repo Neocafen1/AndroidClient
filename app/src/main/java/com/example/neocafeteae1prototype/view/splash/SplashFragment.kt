@@ -42,13 +42,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>() {
 
     private fun nextFragment() {
         connectionLiveData.observe(viewLifecycleOwner){
-            if (it){
-                if (FirebaseAuth.getInstance().currentUser == null) {
-                    findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToSignInOrRegistrationFragment())
-                } else {
-                    getToken()
-                }
-            }
+            getToken()
         }
 
     }
