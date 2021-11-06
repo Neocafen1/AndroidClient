@@ -35,16 +35,12 @@ class UserFragment : BaseFragment<FragmentUserBinding>() {
             userNameTextView.text = sharedPreferences.getString(Consts.USER_NAME,"")
             nameEditText.setText(sharedPreferences.getString(Consts.USER_NAME, ""))
             nameEditText.addTextChangedListener {
-                with(sharedPreferences.edit()) {
-                    putString(Consts.USER_NAME, it.toString().trim())
-                    apply()
-                }
                 userNameTextView.text = it.toString()
                 viewModel.changeUserName(token, it.toString())
 
             }
             exit.setOnClickListener {
-                CustomAlertDialog(this@UserFragment::deleteAccount, "Вы точно хотите удалить аккаунт?", "Для обратной регистрации зайдите в приложение")
+                CustomAlertDialog(this@UserFragment::deleteAccount, "Вы точно хотите выйти из аккаунта?", "Для обратной регистрации зайдите в приложение")
                     .show(childFragmentManager, "TAG")
 
             }
@@ -56,11 +52,13 @@ class UserFragment : BaseFragment<FragmentUserBinding>() {
         viewModel.userData.observe(viewLifecycleOwner) {
             with(binding) {
                 when(it){
-                    is Resource.Success -> {
+                    is Resource.Success -> { it.value
                         numberPhoneTextView.text = it.value.number.toString()
                         birthdayEditText.text = it.value.birthDate
-                        bonusResult.text = viewModel.bonus.toString()
+                        userNameTextView.text = it.value.first_name
+                        nameEditText.setText(it.value.first_name)
                         progress.notVisible()
+                        bonusResult.text = viewModel.bonus.toString()
                     }
                     is Resource.Loading -> {
                         progress.visible()

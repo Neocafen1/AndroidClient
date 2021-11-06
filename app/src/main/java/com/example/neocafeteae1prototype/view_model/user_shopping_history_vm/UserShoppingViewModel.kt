@@ -9,21 +9,21 @@ import javax.inject.Inject
 class UserShoppingViewModel @Inject constructor() : ViewModel() {
 
     private val listProduct = listOf<AllModels.Product>(
-            AllModels.Product("Coffee", "120 c", "3", "360"),
-            AllModels.Product("Coffee", "120 c", "3", "360"),
-            AllModels.Product("Coffee", "120 c", "3", "360"),
-            AllModels.Product("Coffee", "120 c", "3", "360"),
-            AllModels.Product("Coffee", "120 c", "3", "360"),
-            AllModels.Product("Coffee", "120 c", "3", "360"),
-            AllModels.Product("Coffee", "120 c", "3", "360"),
-            AllModels.Product("Coffee", "120 c", "3", "360"),
+            AllModels.Product("Латте", "120", "3", "360", 0),
+            AllModels.Product("Капучино", "120", "3", "360",0),
+            AllModels.Product("Капучино", "120", "3", "360",0),
+            AllModels.Product("Капучино", "120", "3", "360",0),
+            AllModels.Product("Брауни", "120", "3", "360",0),
+            AllModels.Product("Брауни", "120", "3", "360",0),
+            AllModels.Product("Брауни", "120", "3", "360",0),
+            AllModels.Product("Брауни", "120", "3", "360",0),
     )
 
     val list = mutableListOf<AllModels.Receipt>(
-            AllModels.Receipt(listProduct , false, "Tuesday", "Kulatov st", "500"),
-            AllModels.Receipt(listProduct, true, "Monday", "Kulatov st", "500"),
-            AllModels.Receipt(listProduct, true, "Friday", "Soviet", "500"),
-            AllModels.Receipt(listProduct,  false, "18:15", "Panfilov st", "500"),
+            AllModels.Receipt(listProduct , false, "16:50", "Кулатова 85", "500"),
+            AllModels.Receipt(listProduct, true, "18:15", "Кулатова 85", "500"),
+            AllModels.Receipt(listProduct, true, "18:15", "Совестская 50", "500"),
+            AllModels.Receipt(listProduct,  false, "18:15", "Совестская 50", "500"),
     )
 
 }

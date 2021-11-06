@@ -1,68 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginStart="@dimen/default_margin_start_16dp"
-    android:layout_marginTop="@dimen/default_margin_start_16dp"
-    android:layout_marginEnd="@dimen/default_margin_start_16dp"
-    android:background="@drawable/custom_button_positive">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_purple_enable_color"
+    tools:context=".view.bottom_navigation_items.shopping.ShoppingOrderFragment">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/appbar_notification_with_ic_back"/>
+
+    <androidx.core.widget.NestedScrollView
+        style="@style/default_nested_scroll_view"
+        android:background="@drawable/layout_top_rounded"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:background="@drawable/layout_top_rounded"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin_start_16dp"
+                android:layout_marginTop="@dimen/margin_30_dp"
+                android:layout_marginEnd="@dimen/default_margin_start_16dp"
+                android:background="@drawable/custom_button_positive">
+
+                <TextView
+                    android:id="@+id/time"
+                    style="@style/TextView_14sp_Bold"
+                    android:layout_marginTop="@dimen/margin_6_dp"
+                    android:layout_marginEnd="@dimen/margin_6_dp"
+                    android:text="13 : 38"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/border"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin_small_5"
+                    android:background="#C0C0C0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/time" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small_5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/border" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#C0C0C0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recycler" />
 
 
-    <TextView
-        android:id="@+id/time"
-        style="@style/TextView_14sp_Bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/margin_6_dp"
-        android:layout_marginEnd="@dimen/margin_6_dp"
-        android:text="13 : 38" />
-
-    <View
-        android:id="@+id/border"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/time"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/margin_small_5"
-        android:background="#C0C0C0" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/border"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small_5" />
-
-    <View
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recycler"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="5dp"
-        android:background="#C0C0C0" />
+                <ProgressBar
+                    android:visibility="gone"
+                    android:id="@+id/progress"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:indeterminateTint="@color/main_purple_enable_color"
+                    app:layout_constraintStart_toStartOf="@+id/border"
+                    app:layout_constraintTop_toTopOf="@+id/border" />
 
 
-    <TextView
-        android:id="@+id/textView18"
-        style="@style/TextView_18sp_Bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recycler"
-        android:layout_margin="@dimen/default_margin_start_16dp"
-        android:paddingBottom="20dp"
-        android:text="@string/result" />
+                <TextView
+                    android:id="@+id/textView18"
+                    style="@style/TextView_18sp_Bold"
+                    android:layout_marginTop="@dimen/margin_start_16_dp"
+                    android:layout_marginStart="@dimen/margin_start_16_dp"
+                    android:text="@string/Sum"
+                    android:textColor="#545356"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recycler" />
 
-    <TextView
-        android:id="@+id/total_price"
-        style="@style/TextView_18sp_Bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recycler"
-        tools:text="500"
-        android:layout_margin="@dimen/default_margin_start_16dp"
-        android:layout_marginEnd="@dimen/margin_10_dp" />
+                <TextView
+                    android:id="@+id/sum"
+                    style="@style/TextView_18sp_Bold"
+                    android:textColor="#545356"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/margin_10_dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recycler"
+                    tools:text="500" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/bonus"
+                    style="@style/TextView_18sp_Bold"
+                    android:textColor="#545356"
+                    android:layout_marginTop="@dimen/margin_10_dp"
+                    android:layout_marginEnd="@dimen/margin_10_dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sum"
+                    tools:text="500" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    style="@style/TextView_18sp_Bold"
+                    android:textColor="#545356"
+                    app:layout_constraintTop_toBottomOf="@id/textView18"
+                    android:layout_marginTop="@dimen/margin_10_dp"
+                    android:layout_marginStart="@dimen/default_margin_start_16dp"
+                    android:text="Бонусы"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/textView2"
+                    style="@style/TextView_18sp_Bold"
+                    android:textColor="#545356"
+                    app:layout_constraintTop_toBottomOf="@id/textView18"
+                    android:layout_marginTop="@dimen/margin_10_dp"
+                    android:layout_marginStart="@dimen/default_margin_start_16dp"
+                    android:text="@string/Bonus"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/textView3"
+                    style="@style/TextView_18sp_Bold"
+                    android:textColor="#545356"
+                    app:layout_constraintTop_toBottomOf="@id/textView2"
+                    android:paddingBottom="30dp"
+                    android:layout_marginTop="@dimen/margin_10_dp"
+                    android:layout_marginStart="@dimen/default_margin_start_16dp"
+                    android:text="@string/result"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/result"
+                    style="@style/TextView_18sp_Bold"
+                    android:textColor="#545356"
+                    android:layout_marginTop="@dimen/margin_10_dp"
+                    android:layout_marginEnd="@dimen/margin_10_dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/bonus"
+                    tools:text="500" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/take_order"
+                style="@style/registration_button"
+                android:layout_marginTop="@dimen/margin_10_dp"
+                android:text="Оформить заказ"
+                android:background="@drawable/button_enable_custom_style"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

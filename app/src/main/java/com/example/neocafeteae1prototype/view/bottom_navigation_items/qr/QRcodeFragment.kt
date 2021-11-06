@@ -1,6 +1,7 @@
 package com.example.neocafeteae1prototype.view.bottom_navigation_items.qr
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -113,9 +114,11 @@ class QRcodeFragment : BaseFragment<FragmentQrcodeBinding>() {
 
     }
 
+    @SuppressLint("CommitPrefEdits")
     private fun checkTableIsFree(value: AllModels.Table) {
         if (value.status){
             table = value
+            sharedPreferences.edit().putInt(Consts.TABLE, value.id)
             CustomAlertDialog(this::lockTable, "Стол свободен", "Забранировать?").show(childFragmentManager, "TAG")
         }else{
             "Стол занят".showSnackBar(binding.scannerView, Snackbar.LENGTH_LONG)

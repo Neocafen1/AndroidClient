@@ -16,8 +16,10 @@ import com.example.neocafeteae1prototype.data.Consts
 import com.example.neocafeteae1prototype.databinding.FragmentAuthWithNumberBinding
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.logging
+import com.example.neocafeteae1prototype.view.tools.mainLogging
 import com.example.neocafeteae1prototype.view.tools.showToast
 import com.example.neocafeteae1prototype.view_model.regisration_vm.RegistrationViewModel
+import com.vicmikhailau.maskededittext.MaskedFormatter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -52,12 +54,12 @@ class AuthWithNumberFragment : BaseFragment<FragmentAuthWithNumberBinding>() {
     }
 
     private fun sendMessage() {
-        val phoneNumber = binding.numberPhoneTextView.text.toString()
+        val phoneNumber = MaskedFormatter("###-###-###").formatString(binding.numberPhoneTextView.text.toString())!!.unMaskedString
         viewModel.checkNumber(phoneNumber.toInt())
         viewModel.isNumberLocateInDB.observe(viewLifecycleOwner){
             if (it){
                 insertDataToSharedPreference(phoneNumber)
-                findNavController().navigate(AuthWithNumberFragmentDirections.actionAuthWithNumberFragmentToGetMessageAuthorization("+996${phoneNumber}"))
+                findNavController().navigate(AuthWithNumberFragmentDirections.actionAuthWithNumberFragmentToGetMessageAuthorization(phoneNumber))
             }else{
                 "Пожалуйста, проверьте ваш номер".showToast(requireContext(), Toast.LENGTH_LONG)
             }

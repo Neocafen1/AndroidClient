@@ -13,7 +13,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.data.Consts
 import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.Picasso
 
 
 fun String.showToast(context: Context, duration: Int) {

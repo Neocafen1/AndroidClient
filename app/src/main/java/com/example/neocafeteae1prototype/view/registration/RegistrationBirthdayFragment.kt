@@ -90,11 +90,12 @@ class RegistrationBirthdayFragment : BaseFragment<FragmentRegistrationBirthdayBi
     @SuppressLint("CommitPrefEdits")
     private fun getToken(uid: String, number: Int) {
         viewModel.JWTtoken(number, uid)
-        with(sharedPref.edit()){
-            putString(Consts.ACCESS, viewModel.tokens.access)
-            putString(Consts.REFRESH, viewModel.tokens.refresh)
+        viewModel.tokens.observe(viewLifecycleOwner){
+            with(sharedPref.edit()){
+                putString(Consts.ACCESS, it.access)
+                putString(Consts.REFRESH, it.refresh)
+            }
         }
-
     }
 
     override fun setUpToolbar() {

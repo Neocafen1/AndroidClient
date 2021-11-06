@@ -9,7 +9,7 @@ import com.example.neocafeteae1prototype.databinding.PopularItemBinding
 import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.view.tools.delegates.RecyclerItemClickListener
 import com.example.neocafeteae1prototype.view.tools.loadWithGlide
-import com.squareup.picasso.Picasso
+
 
 class MenuRecyclerAdapter(private val click:RecyclerItemClickListener) : RecyclerView.Adapter<MenuRecyclerAdapter.ViewHolder>() {
 
@@ -43,25 +43,25 @@ class MenuRecyclerAdapter(private val click:RecyclerItemClickListener) : Recycle
                 binding.foodName.text = title
                 binding.foodPrice.text = "$price c"
 
-//                if (county > 0) {
-//                    binding.county.apply {
-//                        visibility = View.VISIBLE
-//                        text = county.toString()
-//                    }
-//                    binding.minus.visibility = View.VISIBLE
-//                } else {
-//                    binding.county.visibility = View.GONE
-//                    binding.minus.visibility = View.GONE
-//                }
-//
-//                binding.plus.setOnClickListener {
-//                    county += 1
-//                    notifyItemChanged(position)
-//                }
-//                binding.minus.setOnClickListener {
-//                    county -= 1
-//                    notifyItemChanged(position)
-//                }
+                if (county > 0) {
+                    binding.county.apply {
+                        visibility = View.VISIBLE
+                        text = county.toString()
+                    }
+                    binding.minus.visibility = View.VISIBLE
+                } else {
+                    binding.county.visibility = View.GONE
+                    binding.minus.visibility = View.GONE
+                }
+
+                binding.plus.setOnClickListener {
+                    county += 1
+                    notifyItemChanged(position)
+                }
+                binding.minus.setOnClickListener {
+                    county -= 1
+                    notifyItemChanged(position)
+                }
             }
         }
 

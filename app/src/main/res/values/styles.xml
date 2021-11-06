@@ -179,6 +179,18 @@
         <item name="colorPrimary">@color/main_purple_enable_color</item>
         <item name="colorPrimaryDark">@color/main_purple_enable_color</item>
         <item name="colorAccent">@color/main_purple_enable_color</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+
+    </style>
+
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/layout_top_rounded</item>
     </style>
 
     <style name="Collapsing_Layout_Default">

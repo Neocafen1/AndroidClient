@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_shoppingFragment_to_emptyIllustrativeFragment"
             app:destination="@id/emptyIllustrativeFragment" />
+        <action
+            android:id="@+id/action_shoppingFragment_to_shoppingOrderFragment2"
+            app:destination="@id/shoppingOrderFragment2" />
     </fragment>
     <fragment
         android:id="@+id/notification3"
@@ -30,5 +33,20 @@
         <action
             android:id="@+id/action_emptyIllustrativeFragment_to_notification3"
             app:destination="@id/notification3" />
+    </fragment>
+    <fragment
+        android:id="@+id/shoppingOrderFragment2"
+        android:name="com.example.neocafeteae1prototype.view.bottom_navigation_items.shopping.ShoppingOrderFragment"
+        android:label="fragment_shopping_order"
+        tools:layout="@layout/fragment_shopping_order" >
+        <action
+            android:id="@+id/action_shoppingOrderFragment2_to_notification3"
+            app:destination="@id/notification3" />
+        <argument
+            android:name="shoppingList"
+            app:argType="com.example.neocafeteae1prototype.data.models.AllModels$Test" />
+        <argument
+            android:name="bonus"
+            app:argType="integer" />
     </fragment>
 </navigation>

@@ -14,6 +14,7 @@ import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.databinding.FragmentMenuBinding
 import com.example.neocafeteae1prototype.view.adapters.MenuRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
+import com.example.neocafeteae1prototype.view.tools.bottom_sheet.ProductModalSheet
 import com.example.neocafeteae1prototype.view.tools.delegates.RecyclerItemClickListener
 import com.example.neocafeteae1prototype.view_model.menu_shopping_vm.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,13 +57,14 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(), RecyclerItemClickListe
             R.id.coffee -> "Кофе"
             R.id.tea -> "Чай"
             R.id.drinks -> "Напитки"
+            R.id.desserts -> "Десерты"
             R.id.all -> "Все"
             else -> ""
         }
         sharedViewModel.list.observe(viewLifecycleOwner, {
             when (it){
                 is Resource.Success -> {
-                    val sorted = sharedViewModel.sort(checkedText, it.value.products)
+                    val sorted = sharedViewModel.sort(checkedText, it.value)
                     recyclerAdapter.setList(sorted, checkedText)
                 }
             }
@@ -85,7 +87,7 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(), RecyclerItemClickListe
     }
 
     override fun itemClicked(item: AllModels?) {
-        findNavController().navigate(MenuFragmentDirections.actionMenuFragmentToProductFragment(item!! as AllModels.Popular))
+        ProductModalSheet(item as AllModels.Popular).show(childFragmentManager, "TAG")
     }
 
 }

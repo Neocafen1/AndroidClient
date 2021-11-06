@@ -1,11 +1,11 @@
 package com.example.neocafeteae1prototype.view.bottom_navigation_items.home
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,12 +16,14 @@ import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.databinding.FragmentHomeBinding
 import com.example.neocafeteae1prototype.view.adapters.MainRecyclerAdapter
 import com.example.neocafeteae1prototype.view.adapters.ProductRecyclerAdapter
+import com.example.neocafeteae1prototype.view.tools.bottom_sheet.ProductModalSheet
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.delegates.RecyclerItemClickListener
 import com.example.neocafeteae1prototype.view.tools.delegates.SecondItemClickListener
 import com.example.neocafeteae1prototype.view.tools.notVisible
 import com.example.neocafeteae1prototype.view.tools.visible
 import com.example.neocafeteae1prototype.view_model.menu_shopping_vm.SharedViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,15 +33,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), RecyclerItemClickListe
     private val shareViewModel: SharedViewModel by activityViewModels()
     private val popularAdapter by lazy { ProductRecyclerAdapter(this) }
     private val mainAdapter by lazy { MainRecyclerAdapter(this) }
+    private val token by lazy {sharedPreferences.getString(Consts.ACCESS, "0")}
+
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeBinding {
         return FragmentHomeBinding.inflate(inflater)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclers()
-        getDataFromSharedPreference()
+        getDataAboutUser()
+        shareViewModel.getUserInfo(token!!)
+        shareViewModel.userData.observe(viewLifecycleOwner){
+            binding.userName.text = "Привет ${it.first_name}"
+        }
+
 
         binding.all.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToPopularFragment())
@@ -47,21 +57,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), RecyclerItemClickListe
     }
 
     override fun setUpToolbar() {
-        with(binding){
-            notificationIcon.setOnClickListener {
-                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToNotification())
-            }
-            searchIcon.setOnClickListener {
-                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment())
-            }
+        with(binding) {
+            notificationIcon.setOnClickListener { findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToNotification()) }
+            searchIcon.setOnClickListener { findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment()) }
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private fun getDataFromSharedPreference() {
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        val userName = sharedPref.getString(Consts.USER_NAME, "null")
-        binding.userName.text = "Привет, $userName"
+    private fun getDataAboutUser() {
+        shareViewModel.userData.observe(viewLifecycleOwner){
+            binding.userName.text = "Привет, ${it.first_name}"
+        }
     }
 
     private fun setUpRecyclers() {
@@ -75,10 +81,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), RecyclerItemClickListe
             adapter = popularAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
-        shareViewModel.list.observe(viewLifecycleOwner){
-            when (it){
+        shareViewModel.list.observe(viewLifecycleOwner) {
+            when (it) {
                 is Resource.Success -> {
-                    popularAdapter.setList(it.value.products)
+                    shareViewModel.getPopularProduct(it.value)
+                    popularAdapter.setList(shareViewModel.popularList)
                     binding.progress.notVisible()
                 }
                 Resource.Loading -> binding.progress.visible()
@@ -91,9 +98,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), RecyclerItemClickListe
         findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToMenuFragment(category.name))
     }
 
-    override fun holderClicked(model: AllModels) {
-        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToProductFragment(model as AllModels.Popular))
+    override fun holderClicked(model: AllModels?) {
+        ProductModalSheet(model!! as AllModels.Popular).show(childFragmentManager, "TAG")
     }
-
-
 }

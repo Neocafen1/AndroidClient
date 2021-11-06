@@ -5,14 +5,12 @@
     android:layout_width="match_parent"
     android:fillViewport="true"
     android:layout_height="match_parent"
-    android:background="@color/main_purple_enable_color"
-    tools:context=".view.bottom_navigation_items.home.product.ProductFragment">
+    tools:context=".view.tools.bottom_sheet.ProductModalSheet">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        android:background="@drawable/layout_top_rounded">
+        android:animateLayoutChanges="true">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/close"
@@ -33,7 +31,6 @@
         <ImageView
             android:id="@+id/product_image"
             android:layout_width="210dp"
-            android:scaleType="centerCrop"
             android:layout_height="170dp"
             android:layout_marginTop="60dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -87,7 +84,7 @@
             style="@style/Toolbar_title_text"
             android:layout_marginStart="@dimen/default_margin_start_16dp"
             android:text="@string/result"
-            android:layout_marginTop="140dp"
+            android:layout_marginTop="100dp"
             android:textColor="@color/title_grey"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView5" />
@@ -95,7 +92,7 @@
         <TextView
             android:id="@+id/textView21"
             style="@style/Toolbar_title_text"
-            android:layout_marginTop="140dp"
+            android:layout_marginTop="100dp"
             android:layout_marginEnd="@dimen/default_margin_start_16dp"
             android:textColor="@color/title_grey"
             app:layout_constraintEnd_toEndOf="parent"
@@ -117,6 +114,7 @@
             android:layout_width="@dimen/margin_50_dp"
             android:layout_height="@dimen/margin_50_dp"
             android:layout_marginTop="100dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView24" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

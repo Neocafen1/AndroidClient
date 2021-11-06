@@ -56,4 +56,6 @@
     <string name="in_shop">В заведении</string>
     <string name="empty">Ой пусто!</string>
     <string name="go_to_menu">Перейти в меню</string>
+    <string name="Sum">Сумма:</string>
+    <string name="Bonus">Бонусы:</string>
 </resources>

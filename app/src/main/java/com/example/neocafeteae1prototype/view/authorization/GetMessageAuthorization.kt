@@ -17,12 +17,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.data.Consts
+import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.databinding.FragmentGetMessageAuthorizationBinding
-import com.example.neocafeteae1prototype.databinding.FragmentReceiveMessageFirebaseBinding
-import com.example.neocafeteae1prototype.view.registration.ReceiveMessageFirebaseFragmentArgs
 import com.example.neocafeteae1prototype.view.registration.ReceiveMessageFirebaseFragmentDirections
+import com.example.neocafeteae1prototype.view.tools.notVisible
 import com.example.neocafeteae1prototype.view.tools.showSnackBar
 import com.example.neocafeteae1prototype.view.tools.showToast
+import com.example.neocafeteae1prototype.view.tools.visible
 import com.example.neocafeteae1prototype.view_model.regisration_vm.RegistrationViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseException
@@ -149,13 +150,30 @@ class GetMessageAuthorization : Fragment() {
     private fun signIn(phone: PhoneAuthCredential) {
         FirebaseAuth.getInstance().signInWithCredential(phone).addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                _binding?.progress?.visible()
+                _binding?.otpTextView?.setOTP(phone.smsCode!!)
                 val uid = FirebaseAuth.getInstance().uid
                 val number = sharedPref.getString(Consts.USER_NUMBER, "0")?.toInt()
                 viewModel.JWTtoken(number!!, uid!!)
-                findNavController().navigate(ReceiveMessageFirebaseFragmentDirections.actionReceiveMessageFirebaseFragmentToRegistrationBirthdayFragment())
+                viewModel.tokens.observe(viewLifecycleOwner){
+                    listenUserInfo(it.access)
+                }
             }
         }
+    }
 
+    @SuppressLint("CommitPrefEdits")
+    private fun listenUserInfo(access: String) {
+        viewModel.getUserInfo(access)
+        viewModel.userInfo.observe(viewLifecycleOwner){
+            when(it){
+                is Resource.Success -> {
+                    _binding?.progress?.notVisible()
+                    sharedPref.edit().putString(Consts.USER_NAME, it.value.first_name)
+                    findNavController().navigate(GetMessageAuthorizationDirections.actionGetMessageAuthorizationToBottomViewFragment3())
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

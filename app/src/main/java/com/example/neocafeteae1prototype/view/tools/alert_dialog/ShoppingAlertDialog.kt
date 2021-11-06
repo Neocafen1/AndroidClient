@@ -9,9 +9,18 @@ import android.view.ViewGroup
 import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.databinding.AlertDialogLayoutBinding
 
-class CustomAlertDialog(var function: () -> Unit,  var title: String?, var message: String?) : BaseAlertDialog<AlertDialogLayoutBinding>() {
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): AlertDialogLayoutBinding {
+class ShoppingAlertDialog(
+    var function: () -> Unit,
+    var function2: () -> Unit,
+    var title: String?,
+    var message: String?
+) : BaseAlertDialog<AlertDialogLayoutBinding>() {
+
+    override fun inflateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): AlertDialogLayoutBinding {
         return AlertDialogLayoutBinding.inflate(inflater)
     }
 
@@ -38,6 +47,7 @@ class CustomAlertDialog(var function: () -> Unit,  var title: String?, var messa
         }
 
         binding.negativeButton.setOnClickListener {
+            function2()
             dismiss()
         }
     }

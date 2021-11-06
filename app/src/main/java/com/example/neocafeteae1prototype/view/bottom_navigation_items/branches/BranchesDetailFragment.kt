@@ -15,6 +15,7 @@ import com.example.neocafeteae1prototype.databinding.FragmentDetailBranchBinding
 import com.example.neocafeteae1prototype.view.adapters.MainRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.CustomAlertDialog
+import com.example.neocafeteae1prototype.view.tools.loadWithGlide
 
 class BranchesDetailFragment : BaseFragment<FragmentDetailBranchBinding>() {
 
@@ -41,9 +42,8 @@ class BranchesDetailFragment : BaseFragment<FragmentDetailBranchBinding>() {
 
     private fun setData(param1: AllModels.Filial, socialMedia: AllModels.SocialMedia) {
         with(binding) {
-//            if (param1 != null) {
-//                binding.branchImage.loadWithPicasso(param1.image)
-//            }
+            branchImage.loadWithGlide(param1.image)
+
             branchInfo.text = param1.description
 
             instagram.setOnClickListener {

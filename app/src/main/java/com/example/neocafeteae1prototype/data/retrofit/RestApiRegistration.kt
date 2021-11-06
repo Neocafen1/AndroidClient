@@ -1,11 +1,9 @@
 package com.example.neocafeteae1prototype.data.retrofit
 
 import com.example.neocafeteae1prototype.data.models.AllModels
+import com.google.gson.annotations.SerializedName
 import retrofit2.Response
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface RestApiRegistration {
 
@@ -19,6 +17,15 @@ interface RestApiRegistration {
     ): Response<String>
 
     @FormUrlEncoded
+    @POST("register/")
+    suspend fun sendUserDataWithoutBirthday(
+        @Field("number") number: Int,
+        @Field("password") password: String,
+        @Field("first_name") name: String
+    ):Response<String>
+
+
+    @FormUrlEncoded
     @POST("token/")
     suspend fun getJWTtoken(
         @Field("number") number: Int,
@@ -26,7 +33,7 @@ interface RestApiRegistration {
     ):Response<AllModels.JWT_token>
 
     @FormUrlEncoded
-    @GET("authorize/")
+    @POST("authorize/")
     suspend fun checkUserNumber(@Field("number") number: Int):Response<Boolean>
 
 }

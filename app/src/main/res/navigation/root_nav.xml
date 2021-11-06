@@ -18,7 +18,7 @@
         <action
             android:id="@+id/action_splashFragment_to_bottomViewFragment3"
             app:destination="@id/bottomViewFragment3"
-            app:popUpTo="@id/root_nav"
+            app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment

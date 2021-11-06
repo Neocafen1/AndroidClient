@@ -39,6 +39,8 @@
         <TextView
             android:id="@+id/second_product_name"
             style="@style/TextView_16sp_Bold"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/margin_6_dp"
             android:textColor="@color/white_grey"
@@ -83,6 +85,7 @@
         <TextView
             android:id="@+id/product_name"
             style="@style/TextView_16sp_Bold"
+            android:layout_width="70dp"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/margin_6_dp"
             android:textColor="@color/white_grey"

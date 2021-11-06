@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.neocafeteae1prototype.R
+import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.databinding.FragmentPopularBinding
 import com.example.neocafeteae1prototype.view.adapters.ProductRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
@@ -34,12 +35,10 @@ class PopularFragment : BaseFragment<FragmentPopularBinding>() {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = recyclerAdapter
         }
-//        viewModel.shoppingLiveData.observe(viewLifecycleOwner, {
-//            for (i in it){
-//                if (i.is)
-//            }
-//        })
+        recyclerAdapter.setList(viewModel.popularList)
     }
+
+
 
     override fun setUpToolbar() {
         with(binding.include){

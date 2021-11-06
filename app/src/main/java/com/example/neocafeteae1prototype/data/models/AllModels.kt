@@ -1,11 +1,15 @@
 package com.example.neocafeteae1prototype.data.models
 
-import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 sealed class AllModels: Serializable{
 
     data class Branches(val filials: List<Filial>, val instagram: String, val facebook: String)
+
+    data class FinishProduct(val productId:Int, val quantity:Int)
+
+    data class Order(val tableId:Int, val bonus:Int)
+
 
     data class Table(
         val filialId: Int,
@@ -14,7 +18,7 @@ sealed class AllModels: Serializable{
         val status: Boolean
     )
 
-    data class Test(@SerializedName ("products")val products:MutableList<AllModels.Popular>)
+    data class Test(val products:MutableList<AllModels.Popular>):Serializable
 
     data class Filial(
         val adress: String,
@@ -32,21 +36,20 @@ sealed class AllModels: Serializable{
 
     data class User(val number:Int, val first_name:String, val birthDate:String)
 
-    data class Popular(val category_name: String,
-                       val description: String,
-                       val image: String,
-                       val isPopular: Boolean,
-                       val measure: String,
-                       val price: Int,
-                       val title: String,
-                       val volume: Int):AllModels()
-
-//    data class Popular(val name:String, val price:String, val image: Int, val star:Boolean,
-//                       var county: Int,val category: String): AllModels()
+    data class Popular(
+        val id:Int,
+        val category_name: String,
+        val description: String,
+        val image: String,
+        val isPopular: Boolean,
+        val price: Int,
+        val title: String,
+        var county: Int
+    ) : AllModels()
 
     data class Menu(val name:String, val image: Int): AllModels()
 
-    data class Product(val productName:String, val productPrice:String, val county:String, val totalProductPrice:String):
+    data class Product(val productName:String, val productPrice:String, val county:String, val totalProductPrice:String, val id:Int):
         AllModels()
 
     data class Receipt(val list: List<Product>, val afterTenMin:Boolean, val time:String, val street:String, val total:String):

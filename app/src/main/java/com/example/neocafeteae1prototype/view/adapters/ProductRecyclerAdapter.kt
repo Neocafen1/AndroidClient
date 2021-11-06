@@ -8,6 +8,8 @@ import com.example.neocafeteae1prototype.databinding.PopularItemBinding
 import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.view.tools.delegates.SecondItemClickListener
 import com.example.neocafeteae1prototype.view.tools.loadWithGlide
+import com.example.neocafeteae1prototype.view.tools.notVisible
+import com.example.neocafeteae1prototype.view.tools.visible
 
 class ProductRecyclerAdapter(private val clicker: SecondItemClickListener?) :
     RecyclerView.Adapter<ProductRecyclerAdapter.ViewHolder>() {
@@ -37,18 +39,18 @@ class ProductRecyclerAdapter(private val clicker: SecondItemClickListener?) :
             binding.foodPrice.text = "$price c"
 
             if (isPopular){
-
+                binding.star.visible()
             }
 
-            /*if (county > 0) {
+            if (county > 0) {
                 binding.county.apply {
-                    visibility = View.VISIBLE
+                    visible()
                     text = county.toString()
                 }
-                binding.minus.visibility = View.VISIBLE
+                binding.minus.visible()
             } else {
-                binding.county.visibility = View.GONE
-                binding.minus.visibility = View.GONE
+                binding.county.notVisible()
+                binding.minus.notVisible()
             }
 
             binding.plus.setOnClickListener {
@@ -58,7 +60,7 @@ class ProductRecyclerAdapter(private val clicker: SecondItemClickListener?) :
             binding.minus.setOnClickListener {
                 county -= 1
                 notifyItemChanged(position)
-            }*/
+            }
         }
 
         holder.itemView.setOnClickListener {

@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.data.models.AllModels
+import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.databinding.FragmentEmptyIllustrativeBinding
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.logging
@@ -24,16 +25,18 @@ class EmptyIllustrativeFragment : BaseFragment<FragmentEmptyIllustrativeBinding>
    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
       super.onViewCreated(view, savedInstanceState)
       val bottomNavigationView = activity?.findViewById(R.id.bottomNavigationView) as BottomNavigationView
-      binding.goToMenuButton.setOnClickListener {
-         bottomNavigationView.selectedItemId = R.id.home_nav_graph
-      }
+      binding.goToMenuButton.setOnClickListener { bottomNavigationView.selectedItemId = R.id.home_nav_graph }
 
-//      sharedViewModel.getList().observe(viewLifecycleOwner){
-//         sharedViewModel.sortProductForShopping(it as MutableList<AllModels.Popular>)
-//         if(sharedViewModel.shoppingList.isNotEmpty()){
-//            findNavController().navigateUp()
-//         }
-//      }
+      sharedViewModel.list.observe(viewLifecycleOwner){
+         when(it){
+            is Resource.Success -> {
+               sharedViewModel.sortProductForShopping(it.value)
+               if(sharedViewModel.shoppingList.isNotEmpty()){
+                  findNavController().navigateUp()
+               }
+            }
+         }
+      }
 
 
 

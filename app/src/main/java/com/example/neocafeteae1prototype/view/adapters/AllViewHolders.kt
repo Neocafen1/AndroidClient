@@ -4,19 +4,19 @@ import android.annotation.SuppressLint
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.bumptech.glide.Glide
 import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.databinding.*
 import com.example.neocafeteae1prototype.view.tools.loadWithGlide
 import com.example.neocafeteae1prototype.view.tools.setWhiteColor
-import com.squareup.picasso.Picasso
 
 sealed class AllViewHolders(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
     class MenuItemViewHolder(val binding: MenuItemBinding) : AllViewHolders(binding) {
         fun bind(item: AllModels.Menu) {
             with(binding) {
-                Picasso.with(menuImage.context)
+                Glide.with(menuImage.context)
                     .load(item.image)
                     .into(menuImage)
 
@@ -84,12 +84,14 @@ sealed class AllViewHolders(binding: ViewBinding) : RecyclerView.ViewHolder(bind
 
     class ProductReceiptViewHolder(val binding: ProductRecieptItemBinding) : AllViewHolders(binding){
 
+        @SuppressLint("SetTextI18n")
         fun bind(item: AllModels.Product){
                 with(binding){
                     productName.text = item.productName
-                    productPrice.text = item.productPrice
-                    productCounty.text = item.county
-                    totalProductPrice.text = item.productPrice
+                    productPrice.text = "${item.productPrice} c "
+                    productCounty.text = "${item.county} шт"
+                    val a = item.county.toInt() * item.productPrice.toInt()
+                    totalProductPrice.text = "$a c"
             }
 
         }

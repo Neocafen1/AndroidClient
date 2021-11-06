@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="326dp"
+<LinearLayout android:layout_width="match_parent"
     android:layout_height="50dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginStart="2dp"
@@ -13,6 +13,7 @@
         android:id="@+id/product_name"
         style="@style/TextView_16sp_Bold"
         tools:text="Product"
+        android:width="120dp"
         android:textColor="@color/white_grey"
         android:layout_marginStart="@dimen/margin_6_dp"
         android:layout_gravity="center"/>
@@ -20,9 +21,10 @@
     <TextView
         android:id="@+id/product_price"
         style="@style/TextView_16sp_Thin"
+        android:layout_width="40dp"
         tools:text="240 c"
         android:textColor="@color/white_grey"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="@dimen/margin_20_dp"
         android:layout_gravity="center"/>
 
     <TextView
@@ -30,7 +32,8 @@
         style="@style/TextView_16sp_Thin"
         android:textColor="@color/white_grey"
         tools:text="12 шт"
-        android:layout_marginStart="40dp"
+        android:layout_width="@dimen/margin_50_dp"
+        android:layout_marginStart="@dimen/margin_20_dp"
         android:layout_gravity="center"/>
 
     <TextView
@@ -38,7 +41,7 @@
         style="@style/TextView_16sp_Thin"
         tools:text="2880 c"
         android:textColor="@color/white_grey"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="@dimen/margin_20_dp"
         android:layout_gravity="center"/>
 
 

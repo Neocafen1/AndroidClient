@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/bottom_sheet"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/layout_top_rounded"
+    app:behavior_hideable="false"
+    android:layout_marginTop="20dp"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/close"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="11dp"
+        android:src="@drawable/ic_baseline_close_24"
+        app:backgroundTint="@color/float_button_color"
+        app:fabSize="mini"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+
+    <ImageView
+        android:id="@+id/product_image"
+        android:layout_width="210dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/product_name"
+        style="@style/Toolbar_title_text"
+        android:layout_marginStart="@dimen/margin_20_dp"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/title_grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/product_image"
+        tools:text="@string/bakery" />
+
+    <TextView
+        android:id="@+id/product_price"
+        style="@style/Toolbar_title_text"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/title_grey"
+        app:layout_constraintStart_toEndOf="@+id/product_name"
+        app:layout_constraintTop_toBottomOf="@+id/product_image"
+        tools:text="140 c" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin_start_16dp"
+        android:layout_marginTop="@dimen/margin_10_dp"
+        android:layout_marginEnd="@dimen/default_margin_start_16dp"
+        android:backgroundTint="#F5F6FB"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/product_name">
+
+        <TextView
+            android:id="@+id/description"
+            style="@style/TextView_14sp_Roboto"
+            android:layout_margin="@dimen/default_margin_start_16dp"
+            android:textColor="@color/title_grey"
+            tools:text="dfhsgfgdjfgsjgjsdjgsjdgfsjgfsjgfjsgfjhsgfjgsjfsjgfjsgfjsgfsfhsjshgfsgfksgfjsk" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textView24"
+        style="@style/Toolbar_title_text"
+        android:layout_marginStart="@dimen/default_margin_start_16dp"
+        android:layout_marginTop="@dimen/margin_10_dp"
+        android:text="@string/result"
+        android:textColor="@color/title_grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView5" />
+
+    <TextView
+        android:id="@+id/textView21"
+        style="@style/Toolbar_title_text"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="@dimen/default_margin_start_16dp"
+        android:textColor="@color/title_grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView5"
+        tools:text="140 c" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/add"
+        style="@style/registration_button"
+        android:layout_marginTop="@dimen/default_margin_start_16dp"
+        android:layout_marginBottom="@dimen/margin_20_dp"
+        android:background="@drawable/custom_button_negative"
+        android:text="@string/add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView24" />
+
+    <View
+        android:layout_width="@dimen/margin_50_dp"
+        android:layout_height="@dimen/margin_50_dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView24" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/remove_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin_start_16dp"
+        android:layout_marginTop="@dimen/default_margin_start_16dp"
+        android:backgroundTint="@color/main_purple_enable_color"
+        android:src="@drawable/ic_baseline_remove_24"
+        android:visibility="gone"
+        app:fabSize="normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView24"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/quantity"
+        style="@style/TextView_16sp_Bold"
+        android:layout_marginStart="@dimen/default_margin_start_16dp"
+        android:layout_marginTop="25dp"
+        android:textSize="30sp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/remove_button"
+        app:layout_constraintTop_toBottomOf="@id/textView24"
+        tools:text="30" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin_start_16dp"
+        android:layout_marginTop="@dimen/default_margin_start_16dp"
+        android:backgroundTint="@color/main_purple_enable_color"
+        android:src="@drawable/ic_baseline_add_24"
+        android:visibility="gone"
+        app:fabSize="normal"
+        app:layout_constraintStart_toEndOf="@id/quantity"
+        app:layout_constraintTop_toBottomOf="@id/textView24"
+        app:tint="@color/white" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/add_element"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20_dp"
+        android:layout_marginBottom="@dimen/margin_20_dp"
+        android:background="@drawable/custom_button_negative"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/add"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/addButton"
+        app:layout_constraintTop_toBottomOf="@id/textView24" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
