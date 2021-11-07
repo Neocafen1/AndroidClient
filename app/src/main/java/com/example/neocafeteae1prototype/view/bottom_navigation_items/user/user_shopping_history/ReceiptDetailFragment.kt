@@ -17,12 +17,12 @@ import com.example.neocafeteae1prototype.view.root.BaseFragment
 class ReceiptDetailFragment : BaseFragment<FragmentReceiptDetailBinding>() {
     private val recyclerAdapter by lazy { MainRecyclerAdapter(null) }
     private val safeArgs: ReceiptDetailFragmentArgs by navArgs()
+    private val nav by lazy {findNavController()}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpUi(safeArgs.receiptModel)
         setUpRecyclerView()
-
     }
 
     private fun setUpRecyclerView() {
@@ -43,12 +43,16 @@ class ReceiptDetailFragment : BaseFragment<FragmentReceiptDetailBinding>() {
 
     override fun setUpToolbar() {
         with(binding.include){
-            backButton.setOnClickListener { findNavController().navigateUp() }
-            notification.setOnClickListener { findNavController().navigate(ReceiptDetailFragmentDirections.actionReceiptDetailFragmentToNotification5()) }
+            backButton.setOnClickListener { nav.navigateUp() }
+            notification.setOnClickListener { nav.navigate(ReceiptDetailFragmentDirections.actionReceiptDetailFragmentToNotification5()) }
             textView.text = resources.getText(R.string.history)
         }
     }
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): FragmentReceiptDetailBinding {
         return FragmentReceiptDetailBinding.inflate(inflater)
+    }
+
+    override fun setUpButtonsListener() {
+        binding.repeatOrder.setOnClickListener {  }
     }
 }

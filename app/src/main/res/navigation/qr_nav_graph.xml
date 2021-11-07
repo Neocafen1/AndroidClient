@@ -11,20 +11,8 @@
         android:label="fragment_qrcode"
         tools:layout="@layout/fragment_qrcode" >
         <action
-            android:id="@+id/action_QRcodeFragment_to_checkTableFragment"
-            app:destination="@id/checkTableFragment" />
-        <action
             android:id="@+id/action_QRcodeFragment_to_notification4"
             app:destination="@id/notification4" />
-    </fragment>
-    <fragment
-        android:id="@+id/checkTableFragment"
-        android:name="com.example.neocafeteae1prototype.view.bottom_navigation_items.qr.CheckTableFragment"
-        android:label="fragment_check_table"
-        tools:layout="@layout/fragment_check_table" >
-        <argument
-            android:name="tableId"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/notification4"

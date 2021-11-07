@@ -25,26 +25,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class UserFragment : BaseFragment<FragmentUserBinding>() {
 
     private val viewModel by viewModels<UserViewModel>()
+    private val nav by lazy{findNavController()}
     private val token by lazy {sharedPreferences.getString(Consts.ACCESS, "null") ?: "U don't have access token"}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getUserData()
-        with(binding){
-            shoppingHistory.setOnClickListener { findNavController().navigate(UserFragmentDirections.actionUserFragmentToUserShoppingHistory()) }
-            userNameTextView.text = sharedPreferences.getString(Consts.USER_NAME,"")
-            nameEditText.setText(sharedPreferences.getString(Consts.USER_NAME, ""))
-            nameEditText.addTextChangedListener {
-                userNameTextView.text = it.toString()
-                viewModel.changeUserName(token, it.toString())
-
-            }
-            exit.setOnClickListener {
-                CustomAlertDialog(this@UserFragment::deleteAccount, "Вы точно хотите выйти из аккаунта?", "Для обратной регистрации зайдите в приложение")
-                    .show(childFragmentManager, "TAG")
-
-            }
-        }
     }
 
     private fun getUserData() {
@@ -52,7 +38,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>() {
         viewModel.userData.observe(viewLifecycleOwner) {
             with(binding) {
                 when(it){
-                    is Resource.Success -> { it.value
+                    is Resource.Success -> {
                         numberPhoneTextView.text = it.value.number.toString()
                         birthdayEditText.text = it.value.birthDate
                         userNameTextView.text = it.value.first_name
@@ -60,11 +46,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>() {
                         progress.notVisible()
                         bonusResult.text = viewModel.bonus.toString()
                     }
-                    is Resource.Loading -> {
-                        progress.visible()
-                    }
                 }
-
             }
         }
     }
@@ -79,11 +61,20 @@ class UserFragment : BaseFragment<FragmentUserBinding>() {
     }
 
     override fun setUpToolbar() {
-        binding.include.notification.setOnClickListener {
-            findNavController().navigate(
-                UserFragmentDirections.actionUserFragmentToNotification5()
-            )
-        }
+        binding.include.notification.setOnClickListener { nav.navigate(UserFragmentDirections.actionUserFragmentToNotification5()) }
     }
 
+    override fun setUpButtonsListener() {
+        with(binding){
+            nameEditText.addTextChangedListener { // Изменяет его имя и отправляет данные в бэк
+                userNameTextView.text = it.toString()
+                viewModel.changeUserName(token, it.toString())
+            }
+            exit.setOnClickListener {
+                CustomAlertDialog(this@UserFragment::deleteAccount, "Вы точно хотите выйти из аккаунта?", "Для обратной регистрации зайдите в приложение")
+                    .show(childFragmentManager, "TAG")
+
+            }
+        }
+    }
 }

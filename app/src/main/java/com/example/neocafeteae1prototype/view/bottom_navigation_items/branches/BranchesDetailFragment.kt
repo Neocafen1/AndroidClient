@@ -22,20 +22,29 @@ class BranchesDetailFragment : BaseFragment<FragmentDetailBranchBinding>() {
     private val args: BranchesDetailFragmentArgs by navArgs()
     private val recyclerAdapter = MainRecyclerAdapter(null)
     private lateinit var intent: Intent
+    private val nav by lazy {findNavController()}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setData(args.model, args.socailMedia)
         setUpToolbar()
+        setUpRecycler()
+    }
+
+    private fun setUpRecycler() {
+        binding.recyclerTime.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = recyclerAdapter
+        }
     }
 
     override fun setUpToolbar() {
         with(binding.include) {
             notification.setOnClickListener {
-                findNavController().navigate(BranchesDetailFragmentDirections.actionBranchesDetailFragmentToNotification2())
+                nav.navigate(BranchesDetailFragmentDirections.actionBranchesDetailFragmentToNotification2())
             }
             backButton.setOnClickListener {
-                findNavController().navigateUp()
+                nav.navigateUp()
             }
         }
     }
@@ -54,20 +63,15 @@ class BranchesDetailFragment : BaseFragment<FragmentDetailBranchBinding>() {
                 runLink(socialMedia.facebook)
             }
             onTheMap.setOnClickListener {
-                run2Gis(param1?.link2Gis)
+                run2Gis(param1.link2Gis)
             }
-
-            recyclerTime.apply {
-                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                adapter = recyclerAdapter
-            }
-            recyclerAdapter.setList(param1.schedule)
 
             call.setOnClickListener {
                 intent = Intent(Intent.ACTION_DIAL).setData(Uri.parse("tel:${param1.phone}"))
                 startActivity(intent)
             }
             addressOfBranch.text = param1.adress
+            recyclerAdapter.setList(param1.schedule)
         }
     }
 

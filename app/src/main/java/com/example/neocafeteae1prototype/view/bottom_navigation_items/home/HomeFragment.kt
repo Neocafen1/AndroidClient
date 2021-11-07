@@ -31,42 +31,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), RecyclerItemClickListe
     SecondItemClickListener {
 
     private val shareViewModel: SharedViewModel by activityViewModels()
-    private val popularAdapter by lazy { ProductRecyclerAdapter(this) }
-    private val mainAdapter by lazy { MainRecyclerAdapter(this) }
+    private val popularAdapter by lazy { ProductRecyclerAdapter(this) } // Для продуктоа категории популярное
+    private val mainAdapter by lazy { MainRecyclerAdapter(this) } // Для категории меню
     private val token by lazy {sharedPreferences.getString(Consts.ACCESS, "0")}
-
-
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeBinding {
-        return FragmentHomeBinding.inflate(inflater)
-    }
+    private val nav by lazy {findNavController()}
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclers()
-        getDataAboutUser()
-        shareViewModel.getUserInfo(token!!)
-        shareViewModel.userData.observe(viewLifecycleOwner){
-            binding.userName.text = "Привет ${it.first_name}"
-        }
-
-
-        binding.all.setOnClickListener {
-            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToPopularFragment())
-        }
-    }
-
-    override fun setUpToolbar() {
-        with(binding) {
-            notificationIcon.setOnClickListener { findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToNotification()) }
-            searchIcon.setOnClickListener { findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment()) }
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun getDataAboutUser() {
-        shareViewModel.userData.observe(viewLifecycleOwner){
-            binding.userName.text = "Привет, ${it.first_name}"
+        setUpButtonsListener()
+        with(shareViewModel){
+            getUserInfo(token!!)
+            userData.observe(viewLifecycleOwner){
+                binding.userName.text = "Привет ${it.first_name}"
+            }
         }
     }
 
@@ -88,17 +67,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), RecyclerItemClickListe
                     popularAdapter.setList(shareViewModel.popularList)
                     binding.progress.notVisible()
                 }
-                Resource.Loading -> binding.progress.visible()
             }
         }
     }
 
     override fun itemClicked(item: AllModels?) {
         val category = item as AllModels.Menu
-        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToMenuFragment(category.name))
+        nav.navigate(HomeFragmentDirections.actionHomeFragmentToMenuFragment(category.name))
     }
 
     override fun holderClicked(model: AllModels?) {
         ProductModalSheet(model!! as AllModels.Popular).show(childFragmentManager, "TAG")
+    }
+
+    private fun setUpButtonsListener() {
+        binding.all.setOnClickListener { nav.navigate(HomeFragmentDirections.actionHomeFragmentToPopularFragment()) }
+    }
+
+    override fun setUpToolbar() {
+        with(binding) {
+            notificationIcon.setOnClickListener { nav.navigate(HomeFragmentDirections.actionHomeFragmentToNotification()) }
+            searchIcon.setOnClickListener { nav.navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment()) }
+        }
+    }
+
+    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeBinding {
+        return FragmentHomeBinding.inflate(inflater)
     }
 }

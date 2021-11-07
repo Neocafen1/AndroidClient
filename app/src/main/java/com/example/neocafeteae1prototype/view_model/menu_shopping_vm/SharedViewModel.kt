@@ -21,7 +21,7 @@ class SharedViewModel @Inject constructor(private val repository: MainRepository
 
     private var sortedList = mutableListOf<AllModels.Popular>()
     var bonus = 50
-    val list = MutableLiveData<Resource<MutableList<AllModels.Popular>>>()
+    val list = MutableLiveData<MutableList<AllModels.Popular>>()
     val userData = MutableLiveData<AllModels.User>()
     val menuList = mutableListOf<AllModels.Menu>(
         AllModels.Menu("Чай", R.drawable.tea),
@@ -49,7 +49,9 @@ class SharedViewModel @Inject constructor(private val repository: MainRepository
     private fun getAllProduct() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = async { repository.getAllProduct() }.await()
-            list.postValue(response)
+            if (response is Resource.Success){
+                list.postValue(response.value)
+            }
         }
     }
 

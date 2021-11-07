@@ -1,28 +1,28 @@
 package com.example.neocafeteae1prototype.view.bottom_navigation_items.shopping
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.data.Consts
 import com.example.neocafeteae1prototype.data.models.AllModels
-import com.example.neocafeteae1prototype.view_model.menu_shopping_vm.SharedViewModel
-import com.example.neocafeteae1prototype.view.root.BaseFragment
-import com.example.neocafeteae1prototype.view.adapters.ShoppingRecyclerAdapter
-import com.example.neocafeteae1prototype.view.tools.alert_dialog.CustomAlertDialog
-import com.example.neocafeteae1prototype.databinding.FragmentShoppingBinding
 import com.example.neocafeteae1prototype.data.models.Resource
-import com.example.neocafeteae1prototype.view.tools.*
+import com.example.neocafeteae1prototype.databinding.FragmentShoppingBinding
+import com.example.neocafeteae1prototype.view.adapters.ShoppingRecyclerAdapter
+import com.example.neocafeteae1prototype.view.root.BaseFragment
+import com.example.neocafeteae1prototype.view.tools.WrapContentLinearLayoutManager
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.ShoppingAlertDialog
 import com.example.neocafeteae1prototype.view.tools.bottom_sheet.BonusBottomSheet
+import com.example.neocafeteae1prototype.view.tools.cardActivate
+import com.example.neocafeteae1prototype.view.tools.cardNotActive
 import com.example.neocafeteae1prototype.view.tools.delegates.RecyclerItemClickListener
 import com.example.neocafeteae1prototype.view.tools.delegates.SecondItemClickListener
+import com.example.neocafeteae1prototype.view_model.menu_shopping_vm.SharedViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,6 +31,7 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val bonus by lazy {sharedViewModel.bonus}
     private var inShop = true
+    private val nav by lazy {findNavController()}
     private val bottomNavigation by lazy {activity?.findViewById(R.id.bottomNavigationView) as BottomNavigationView}
     private val recyclerAdapter by lazy { ShoppingRecyclerAdapter(this,this) }
 
@@ -42,7 +43,7 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
         buttonListener()
         getTotalPrice()
 
-        binding.delivery.setOnClickListener {
+        binding.delivery.setOnClickListener {  // Слушатель в заведении или нет меняет background кнопки
             inShop = false
             buttonListener()
         }
@@ -51,10 +52,6 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
             buttonListener()
         }
 
-        binding.order.setOnClickListener {
-            ShoppingAlertDialog(this::showBonusAlertDialog, this::withoutBonus, "Вы накопили $bonus бонусов", "Хотите снять их?")
-                .show(childFragmentManager, "TAG")
-        }
     }
 
     // Слушатель 2 cardView (В заведении или нет) меняет их background (Клиент таким  образом узнает какой из них активный)
@@ -65,6 +62,11 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
         } else {
             binding.delivery.cardActivate(binding.deliveryText)
             binding.inShop.cardNotActive(binding.inShopText)
+        }
+
+        binding.order.setOnClickListener {
+            ShoppingAlertDialog(this::showBonusAlertDialog, this::withoutBonus, "Вы накопили $bonus бонусов", "Хотите снять их?")
+                .show(childFragmentManager, "TAG")
         }
     }
 
@@ -82,7 +84,7 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
                 is Resource.Success -> {
                     sharedViewModel.sortProductForShopping(it.value)
                     if (sharedViewModel.shoppingList.isEmpty()){ // ЕСли он пустой открывается окно что корзина пустая
-                        findNavController().navigate(ShoppingFragmentDirections.actionShoppingFragmentToEmptyIllustrativeFragment())
+                        nav.navigate(ShoppingFragmentDirections.actionShoppingFragmentToEmptyIllustrativeFragment())
                     }else {
                         recyclerAdapter.setList(sharedViewModel.shoppingList)
                     }
@@ -92,6 +94,7 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
         getTotalPrice()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun getTotalPrice() {
         binding.result.text = "${sharedViewModel.getTotalPrice()} c"
     }
@@ -115,14 +118,14 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
             bottomNavigation.selectedItemId = R.id.qr_nav_graph
         }else {
             val shoppingList = AllModels.Test(sharedViewModel.shoppingList)
-            findNavController().navigate(ShoppingFragmentDirections.actionShoppingFragmentToShoppingOrderFragment2(shoppingList, bonus.toInt()))
+            nav.navigate(ShoppingFragmentDirections.actionShoppingFragmentToShoppingOrderFragment2(shoppingList, bonus.toInt()))
         }
 
     }
 
     private fun withoutBonus(){
         val shoppingList = AllModels.Test(sharedViewModel.shoppingList)
-        findNavController().navigate(ShoppingFragmentDirections.actionShoppingFragmentToShoppingOrderFragment2(shoppingList, 0))
+        nav.navigate(ShoppingFragmentDirections.actionShoppingFragmentToShoppingOrderFragment2(shoppingList, 0))
     }
 
     override fun setUpToolbar() {
@@ -132,7 +135,7 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
         }
     }
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?, ): FragmentShoppingBinding {
+    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): FragmentShoppingBinding {
         return FragmentShoppingBinding.inflate(inflater)
     }
 
@@ -142,7 +145,7 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
 
     override fun holderClicked(model: AllModels?) {
         if (sharedViewModel.shoppingList.isEmpty()) { // ЕСли он пустой открывается окно что корзина пустая
-            findNavController().navigate(ShoppingFragmentDirections.actionShoppingFragmentToEmptyIllustrativeFragment())
+            nav.navigate(ShoppingFragmentDirections.actionShoppingFragmentToEmptyIllustrativeFragment())
         }
     }
 

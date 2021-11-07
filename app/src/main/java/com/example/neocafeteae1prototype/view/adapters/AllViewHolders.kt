@@ -79,7 +79,6 @@ sealed class AllViewHolders(binding: ViewBinding) : RecyclerView.ViewHolder(bind
             totalProductPrice.text = data.totalProductPrice
 
         }
-
     }
 
     class ProductReceiptViewHolder(val binding: ProductRecieptItemBinding) : AllViewHolders(binding){
@@ -93,7 +92,6 @@ sealed class AllViewHolders(binding: ViewBinding) : RecyclerView.ViewHolder(bind
                     val a = item.county.toInt() * item.productPrice.toInt()
                     totalProductPrice.text = "$a c"
             }
-
         }
     }
 
@@ -108,5 +106,4 @@ sealed class AllViewHolders(binding: ViewBinding) : RecyclerView.ViewHolder(bind
             }
         }
     }
-
 }

@@ -23,16 +23,11 @@ class UserShoppingHistory : BaseFragment<FragmentUserShoppingHistoryBinding>(), 
 
     private val recyclerAdapter by lazy { MainRecyclerAdapter(this) }
     private val viewModel: UserShoppingViewModel by viewModels()
+    private val bottomNavigationView by lazy {activity?.findViewById(R.id.bottomNavigationView) as BottomNavigationView}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecycler()
-
-        val bottomNavigationView = activity?.findViewById(R.id.bottomNavigationView) as BottomNavigationView
-        with(binding){
-            clearReceipt.setOnClickListener { showAlertDialog() }
-            bottomNavigationView.setOnClickListener{bottomNavigationView.selectedItemId = R.id.home_nav_graph}
-        }
     }
 
     private fun setUpRecycler() {
@@ -67,7 +62,6 @@ class UserShoppingHistory : BaseFragment<FragmentUserShoppingHistoryBinding>(), 
             imageView2.visibility = isEmptyViewsVisibility
             textView5.visibility = isEmptyViewsVisibility
             goToMenuButton.visibility = isEmptyViewsVisibility
-
             recyclerView.visibility = defaultViewsVisibility
             clearReceipt.visibility = defaultViewsVisibility
         }
@@ -85,6 +79,10 @@ class UserShoppingHistory : BaseFragment<FragmentUserShoppingHistoryBinding>(), 
         return FragmentUserShoppingHistoryBinding.inflate(inflater)
     }
 
-
-
+    override fun setUpButtonsListener() {
+        with(binding){
+            clearReceipt.setOnClickListener { showAlertDialog() }
+            bottomNavigationView.setOnClickListener{bottomNavigationView.selectedItemId = R.id.home_nav_graph}
+        }
+    }
 }

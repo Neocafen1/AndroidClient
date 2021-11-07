@@ -41,10 +41,15 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>() {
     }
 
     private fun nextFragment() {
-        connectionLiveData.observe(viewLifecycleOwner){
-            getToken()
+        connectionLiveData.observe(viewLifecycleOwner) {
+            if (it) {
+                if (FirebaseAuth.getInstance().uid == null) {
+                    findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToSignInOrRegistrationFragment())
+                } else {
+                    getToken()
+                }
+            }
         }
-
     }
 
     @SuppressLint("CommitPrefEdits")
