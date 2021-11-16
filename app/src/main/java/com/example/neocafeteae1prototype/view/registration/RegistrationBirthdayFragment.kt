@@ -14,6 +14,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.data.Consts
+import com.example.neocafeteae1prototype.data.local.LocalDatabase
 import com.example.neocafeteae1prototype.databinding.FragmentRegistrationBirthdayBinding
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.logging
@@ -23,21 +24,19 @@ import com.example.neocafeteae1prototype.view_model.regisration_vm.RegistrationV
 import com.google.firebase.auth.FirebaseAuth
 import com.vicmikhailau.maskededittext.MaskedFormatter
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RegistrationBirthdayFragment : BaseFragment<FragmentRegistrationBirthdayBinding>() {
     private val viewModel by activityViewModels<RegistrationViewModel>()
-    private lateinit var birthdayDate: String
-    private lateinit var sharedPref:SharedPreferences
+    @Inject lateinit var sharedPreferences:LocalDatabase
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         with(binding){
 //            skip.setOnClickListener { sendUserData() }
             signIn.setOnClickListener {
-                val formatter = MaskedFormatter("###-###-###").formatString(binding.editText.text.toString())?.unMaskedString
-                insertDataToSharedPreference(formatter!!)
                 sendUserData()
             }
             editText.addTextChangedListener {
@@ -62,22 +61,14 @@ class RegistrationBirthdayFragment : BaseFragment<FragmentRegistrationBirthdayBi
             }
     }
 
-    private fun insertDataToSharedPreference(birthday: String){
-        with(sharedPref.edit()) {
-            putString(Consts.USER_BIRTHDAY, birthday)
-            apply()
-        }
-
-    }
-
     private fun sendUserData(){
-        val name = sharedPref.getString(Consts.USER_NAME, "null")
-        val number = sharedPref.getString(Consts.USER_NUMBER, "0")?.toInt()
+        val name = sharedPreferences.fetchUserName()
+        val number = sharedPreferences.fetchUserNumber()
         val uid = FirebaseAuth.getInstance().uid
         val birthday = binding.editText.text.toString() ?: "null"
 
         binding.progress.visible()
-        viewModel.sendUserData( number!!.toInt(), uid!!, name!!, birthday)
+        viewModel.sendUserData( number, uid!!, name ?: "N/A", birthday)
 
         viewModel.userCreated.observe(viewLifecycleOwner){
            if (it){
@@ -91,10 +82,8 @@ class RegistrationBirthdayFragment : BaseFragment<FragmentRegistrationBirthdayBi
     private fun getToken(uid: String, number: Int) {
         viewModel.JWTtoken(number, uid)
         viewModel.tokens.observe(viewLifecycleOwner){
-            with(sharedPref.edit()){
-                putString(Consts.ACCESS, it.access)
-                putString(Consts.REFRESH, it.refresh)
-            }
+            sharedPreferences.saveAccessToken(it.access)
+            sharedPreferences.saveRefreshToken(it.refresh)
         }
     }
 
@@ -102,7 +91,7 @@ class RegistrationBirthdayFragment : BaseFragment<FragmentRegistrationBirthdayBi
         "RegistrationBirthdayToolbar".logging()
     }
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?, ): FragmentRegistrationBirthdayBinding {
+    override fun inflateView(inflater: LayoutInflater, container: ViewGroup? ): FragmentRegistrationBirthdayBinding {
         return FragmentRegistrationBirthdayBinding.inflate(inflater)
     }
 }

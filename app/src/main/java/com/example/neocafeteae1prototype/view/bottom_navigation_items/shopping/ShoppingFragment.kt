@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.data.Consts
 import com.example.neocafeteae1prototype.data.models.AllModels
-import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.databinding.FragmentShoppingBinding
 import com.example.neocafeteae1prototype.view.adapters.ShoppingRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
@@ -21,6 +20,7 @@ import com.example.neocafeteae1prototype.view.tools.cardActivate
 import com.example.neocafeteae1prototype.view.tools.cardNotActive
 import com.example.neocafeteae1prototype.view.tools.delegates.RecyclerItemClickListener
 import com.example.neocafeteae1prototype.view.tools.delegates.SecondItemClickListener
+import com.example.neocafeteae1prototype.view.tools.mainLogging
 import com.example.neocafeteae1prototype.view_model.menu_shopping_vm.SharedViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,11 +37,11 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedViewModel.getBonus(sharedPreferences.getString(Consts.ACCESS, "0")!!)
+        "OnViewCreated".mainLogging()
+        getTotalPrice()
         setUpUi()
         setUpRecycler()
         buttonListener()
-        getTotalPrice()
 
         binding.delivery.setOnClickListener {  // Слушатель в заведении или нет меняет background кнопки
             inShop = false
@@ -65,8 +65,12 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
         }
 
         binding.order.setOnClickListener {
-            ShoppingAlertDialog(this::showBonusAlertDialog, this::withoutBonus, "Вы накопили $bonus бонусов", "Хотите снять их?")
-                .show(childFragmentManager, "TAG")
+            if (sharedViewModel.bonus != 0){
+                ShoppingAlertDialog(this::showBonusAlertDialog, this::useBonus, "Вы накопили $bonus бонусов", "Хотите снять их?")
+                    .show(childFragmentManager, "TAG")
+            }else {
+                useBonus(0)
+            }
         }
     }
 
@@ -79,19 +83,15 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
     }
 
     private fun getShoppingList(){ // Сортирует массив и берет данные у которых кол во больше 0
-        sharedViewModel.list.observe(viewLifecycleOwner) {
-            when(it){
-                is Resource.Success -> {
-                    sharedViewModel.sortProductForShopping(it.value)
-                    if (sharedViewModel.shoppingList.isEmpty()){ // ЕСли он пустой открывается окно что корзина пустая
+        sharedViewModel.productList.observe(viewLifecycleOwner) {
+                    sharedViewModel.sortProductForShopping(it)
+                    if (sharedViewModel.shoppingList.isEmpty()){ // Если он пустой открывается окно что корзина пустая
                         nav.navigate(ShoppingFragmentDirections.actionShoppingFragmentToEmptyIllustrativeFragment())
                     }else {
                         recyclerAdapter.setList(sharedViewModel.shoppingList)
                     }
+            getTotalPrice()
                 }
-            }
-        }
-        getTotalPrice()
     }
 
     @SuppressLint("SetTextI18n")
@@ -112,20 +112,15 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
 
 
     //Проверка бонусов и стола
-    private fun useBonus(bonus: String) { // Сработает когда в AlertDialog срабатывает использовать бонусы
-        val tableId = sharedPreferences.getInt(Consts.TABLE, 0)
-        if (tableId == 0){
-            bottomNavigation.selectedItemId = R.id.qr_nav_graph
-        }else {
+    private fun useBonus(bonus: Int) { // Сработает когда в AlertDialog срабатывает использовать бонусы
+//        val tableId = sharedPreferences.getInt(Consts.TABLE, 0)
+//        if (tableId == 0){
+//            bottomNavigation.selectedItemId = R.id.qr_nav_graph
+//        }else {
             val shoppingList = AllModels.Test(sharedViewModel.shoppingList)
-            nav.navigate(ShoppingFragmentDirections.actionShoppingFragmentToShoppingOrderFragment2(shoppingList, bonus.toInt()))
-        }
+            nav.navigate(ShoppingFragmentDirections.actionShoppingFragmentToShoppingOrderFragment2(shoppingList, bonus))
+//        }
 
-    }
-
-    private fun withoutBonus(){
-        val shoppingList = AllModels.Test(sharedViewModel.shoppingList)
-        nav.navigate(ShoppingFragmentDirections.actionShoppingFragmentToShoppingOrderFragment2(shoppingList, 0))
     }
 
     override fun setUpToolbar() {
@@ -148,5 +143,6 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
             nav.navigate(ShoppingFragmentDirections.actionShoppingFragmentToEmptyIllustrativeFragment())
         }
     }
+
 
 }

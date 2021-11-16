@@ -2,25 +2,20 @@ package com.example.neocafeteae1prototype.view.authorization
 
 import `in`.aabhasjindal.otptextview.OTPListener
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.CountDownTimer
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.neocafeteae1prototype.R
-import com.example.neocafeteae1prototype.data.Consts
-import com.example.neocafeteae1prototype.data.models.Resource
+import com.example.neocafeteae1prototype.data.local.LocalDatabase
 import com.example.neocafeteae1prototype.databinding.FragmentGetMessageAuthorizationBinding
-import com.example.neocafeteae1prototype.view.registration.ReceiveMessageFirebaseFragmentDirections
-import com.example.neocafeteae1prototype.view.tools.notVisible
 import com.example.neocafeteae1prototype.view.tools.showSnackBar
 import com.example.neocafeteae1prototype.view.tools.showToast
 import com.example.neocafeteae1prototype.view.tools.visible
@@ -31,23 +26,27 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class GetMessageAuthorization : Fragment() {
 
     private var _binding: FragmentGetMessageAuthorizationBinding? = null
     private val viewModel by activityViewModels<RegistrationViewModel>()
-    private lateinit var phoneNumber: String
+    private var phoneNumber: Int = 0
     private var id: String = ""
     private val args: GetMessageAuthorizationArgs by navArgs()
-    private lateinit var sharedPref: SharedPreferences
+
+    @Inject lateinit var localDatabase: LocalDatabase
+
     private lateinit var firebaseCallback: PhoneAuthProvider.OnVerificationStateChangedCallbacks
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentGetMessageAuthorizationBinding.inflate(inflater, container, false)
         phoneNumber = args.phoneNumber
-        sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
 
         _binding?.registrationButton?.setOnClickListener {
             sendMessage()
@@ -121,7 +120,7 @@ class GetMessageAuthorization : Fragment() {
         FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    findNavController().navigate(ReceiveMessageFirebaseFragmentDirections.actionReceiveMessageFirebaseFragmentToRegistrationBirthdayFragment())
+                    getData()
                 }
             }
     }
@@ -147,33 +146,25 @@ class GetMessageAuthorization : Fragment() {
         }.start()
     }
 
+    @SuppressLint("CommitPrefEdits")
     private fun signIn(phone: PhoneAuthCredential) {
         FirebaseAuth.getInstance().signInWithCredential(phone).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                _binding?.progress?.visible()
                 _binding?.otpTextView?.setOTP(phone.smsCode!!)
-                val uid = FirebaseAuth.getInstance().uid
-                val number = sharedPref.getString(Consts.USER_NUMBER, "0")?.toInt()
-                viewModel.JWTtoken(number!!, uid!!)
-                viewModel.tokens.observe(viewLifecycleOwner){
-                    listenUserInfo(it.access)
-                }
+                getData()
             }
         }
     }
 
-    @SuppressLint("CommitPrefEdits")
-    private fun listenUserInfo(access: String) {
-        viewModel.getUserInfo(access)
-        viewModel.userInfo.observe(viewLifecycleOwner){
-            when(it){
-                is Resource.Success -> {
-                    _binding?.progress?.notVisible()
-                    sharedPref.edit().putString(Consts.USER_NAME, it.value.first_name)
-                    findNavController().navigate(GetMessageAuthorizationDirections.actionGetMessageAuthorizationToBottomViewFragment3())
-                }
-            }
+    private fun getData(){
+        _binding?.progress?.visible()
+        val uid = FirebaseAuth.getInstance().uid
+        viewModel.JWTtoken(localDatabase.fetchUserNumber(), uid!!)
+        viewModel.tokens.observe(viewLifecycleOwner){
+            localDatabase.saveAccessToken(it.access)
+            localDatabase.saveRefreshToken(it.refresh)
         }
+        findNavController().navigate(GetMessageAuthorizationDirections.actionGetMessageAuthorizationToBottomViewFragment3())
     }
 
     override fun onDestroyView() {

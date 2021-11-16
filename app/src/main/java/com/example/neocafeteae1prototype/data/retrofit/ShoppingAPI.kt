@@ -9,11 +9,12 @@ interface ShoppingAPI {
     suspend fun getAllProduct(): MutableList<AllModels.Popular>
 
     @FormUrlEncoded
-    @POST("ncafe/orders/")
+    @POST("ncafe/test/")
     suspend fun sendProductList(
-        @Header("Authorization") token: String,
         @Field("order") order: AllModels.Order,
         @Field("orderItems") model: List<AllModels.FinishProduct>
-    ): String
+    )
 
+    @GET("ncafe/orders/history/")
+    suspend fun getShoppingHistory(): MutableList<AllModels.Receipt>
 }

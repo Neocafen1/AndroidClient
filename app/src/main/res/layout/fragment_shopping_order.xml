@@ -35,9 +35,16 @@
                     style="@style/TextView_14sp_Bold"
                     android:layout_marginTop="@dimen/margin_6_dp"
                     android:layout_marginEnd="@dimen/margin_6_dp"
-                    android:text="13 : 38"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/date"
+                    style="@style/TextView_14sp_Bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="@dimen/margin_6_dp"
+                    android:layout_marginTop="@dimen/margin_6_dp"/>
 
                 <View
                     android:id="@+id/border"

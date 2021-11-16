@@ -17,6 +17,7 @@ import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.data.Consts
 import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.data.models.Resource
@@ -24,6 +25,7 @@ import com.example.neocafeteae1prototype.databinding.FragmentQrcodeBinding
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.CustomAlertDialog
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.DoneAlertDialog
+import com.example.neocafeteae1prototype.view.tools.logging
 import com.example.neocafeteae1prototype.view.tools.showSnackBar
 import com.example.neocafeteae1prototype.view.tools.showToast
 import com.example.neocafeteae1prototype.view_model.qr_vm.QRViewModel
@@ -42,7 +44,6 @@ class QRcodeFragment : BaseFragment<FragmentQrcodeBinding>() {
     private val viewModel by viewModels<QRViewModel>()
     private lateinit var scanner: CodeScanner
     private lateinit var table:AllModels.Table
-    private val token by lazy {sharedPreferences.getString(Consts.ACCESS, "0")}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -104,12 +105,9 @@ class QRcodeFragment : BaseFragment<FragmentQrcodeBinding>() {
     }
 
     private fun checkTable(result: String) {
-        viewModel.checkTable(result, token!!)
+        viewModel.checkTable(result)
         viewModel.table.observe(viewLifecycleOwner){ // Проверяю чтобы не ввел ли юзер совсем другой QR
-            when(it){
-                is Resource.Success -> checkTableIsFree(it.value)
-                is Resource.Failure -> "Неправильный QR Code".showToast(requireContext(), Toast.LENGTH_LONG)
-            }
+            checkTable(it.qrCode)
         }
 
     }
@@ -118,15 +116,19 @@ class QRcodeFragment : BaseFragment<FragmentQrcodeBinding>() {
     private fun checkTableIsFree(value: AllModels.Table) {
         if (value.status){
             table = value
-            sharedPreferences.edit().putInt(Consts.TABLE, value.id)
             CustomAlertDialog(this::lockTable, "Стол свободен", "Забранировать?").show(childFragmentManager, "TAG")
         }else{
-            "Стол занят".showSnackBar(binding.scannerView, Snackbar.LENGTH_LONG)
+            Snackbar.make(binding.scannerView, "Стол занят", Snackbar.LENGTH_INDEFINITE).apply {
+                setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.red))
+                setAction("Закрыть"){
+                    dismiss()
+                }
+            }.show()
         }
     }
 
     private fun lockTable(){
-        viewModel.lockTable(table.qrCode, token!!)
+        viewModel.lockTable(table.qrCode)
         viewModel.lockedTable.observe(viewLifecycleOwner){
             DoneAlertDialog("Стол забронирован").show(childFragmentManager, "TAG")
         }
@@ -137,7 +139,6 @@ class QRcodeFragment : BaseFragment<FragmentQrcodeBinding>() {
             QRcodeFragmentDirections.actionQRcodeFragmentToNotification4()
         ) }
     }
-
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): FragmentQrcodeBinding {
         return FragmentQrcodeBinding.inflate(inflater)

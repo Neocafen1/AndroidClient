@@ -1,7 +1,5 @@
 package com.example.neocafeteae1prototype.view.registration
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +8,18 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import com.example.neocafeteae1prototype.R
-import com.example.neocafeteae1prototype.data.Consts
+import com.example.neocafeteae1prototype.data.local.LocalDatabase
 import com.example.neocafeteae1prototype.databinding.FragmentRegistrationNumberFirebaseBinding
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.logging
 import com.vicmikhailau.maskededittext.MaskedFormatter
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class RegistrationNumberFirebaseFragment : BaseFragment<FragmentRegistrationNumberFirebaseBinding>() {
+
+    @Inject lateinit var sharedPreferences: LocalDatabase
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,24 +50,13 @@ class RegistrationNumberFirebaseFragment : BaseFragment<FragmentRegistrationNumb
     }
 
     private fun sendMessage() {
-        val phoneNumber = binding.numberPhoneTextView.text.toString()
+        val name = binding.name.text.toString()
         val unMaskedNumber = MaskedFormatter("###-###-###").formatString(binding.numberPhoneTextView.text.toString())?.unMaskedString
-
-        insertDataToSharedPreference(binding.name.text.toString(), unMaskedNumber.toString())
+        sharedPreferences.saveUserNumber(unMaskedNumber.toString().toInt())
+        sharedPreferences.saveUserName(name)
         findNavController().navigate(
-            RegistrationNumberFirebaseFragmentDirections.actionRegistrationNumberFirebaseFragmentToReceiveMessageFirebaseFragment(phoneNumber)
+            RegistrationNumberFirebaseFragmentDirections.actionRegistrationNumberFirebaseFragmentToReceiveMessageFirebaseFragment(unMaskedNumber.toString())
         )
-    }
-
-    @SuppressLint("CommitPrefEdits")
-    private fun insertDataToSharedPreference(name: String, number: String) {
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        with(sharedPref.edit()) {
-            putString(Consts.USER_NAME, name)
-            putString(Consts.USER_NUMBER, number)
-            apply()
-        }
-
     }
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup?, ): FragmentRegistrationNumberFirebaseBinding {

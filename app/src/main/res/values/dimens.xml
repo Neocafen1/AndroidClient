@@ -32,4 +32,5 @@
     <dimen name="margin_50_dp">50dp</dimen>
     <dimen name="width_160_dp">160dp</dimen>
     <dimen name="margin_77_dp">77dp</dimen>
+    <dimen name="item_offset">10dp</dimen>
 </resources>

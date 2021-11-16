@@ -1,38 +1,43 @@
 package com.example.neocafeteae1prototype.view_model.qr_vm
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.repository.MainRepository
+import com.example.neocafeteae1prototype.view.root.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class QRViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
+class QRViewModel @Inject constructor(private val repository: MainRepository) : BaseViewModel() {
 
-    val table = MutableLiveData<Resource<AllModels.Table>>()
+    val table = MutableLiveData<AllModels.Table>()
+    override var errorLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     val lockedTable = MutableLiveData<AllModels.Table>()
 
-    fun checkTable(table:String, token:String){
+    fun checkTable(table:String) {
         viewModelScope.launch {
-            val response = async { repository.checkTable(table, token) }.await()
-            this@QRViewModel.table.postValue(response)
+            repository.checkTable(table).let {
+                when (it) {
+                    is Resource.Failure -> errorLiveData.postValue(true)
+                    is Resource.Success -> this@QRViewModel.table.postValue(it.value)
+                }
             }
         }
+    }
 
-    fun lockTable(table: String, token: String){
+    fun lockTable(table: String){
         viewModelScope.launch {
-            val response = async { repository.lockTable(table, token) }.await()
-            if (response is Resource.Success)
-            this@QRViewModel.lockedTable.postValue(response.value)
+            repository.lockTable(table).let {
+                when(it){
+                    is Resource.Failure -> errorLiveData.postValue(true)
+                    is Resource.Success -> this@QRViewModel.lockedTable.postValue(it.value)
+                }
+            }
         }
     }
-
-
-
-    }
+}
 

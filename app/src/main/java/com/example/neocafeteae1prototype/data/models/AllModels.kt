@@ -1,5 +1,6 @@
 package com.example.neocafeteae1prototype.data.models
 
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 sealed class AllModels: Serializable{
@@ -9,6 +10,11 @@ sealed class AllModels: Serializable{
     data class FinishProduct(val productId:Int, val quantity:Int)
 
     data class Order(val tableId:Int, val bonus:Int)
+
+    data class RefreshResponse(@SerializedName("access")
+        val access: String
+    )
+
 
 
     data class Table(

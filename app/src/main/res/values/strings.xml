@@ -58,4 +58,6 @@
     <string name="go_to_menu">Перейти в меню</string>
     <string name="Sum">Сумма:</string>
     <string name="Bonus">Бонусы:</string>
+    <string name="date_format">MM/dd/yyyy</string>
+    <string name="hour_format">HH:mm</string>
 </resources>

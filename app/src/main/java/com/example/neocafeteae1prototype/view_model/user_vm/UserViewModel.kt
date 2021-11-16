@@ -2,52 +2,48 @@ package com.example.neocafeteae1prototype.view_model.user_vm
 
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.repository.MainRepository
-import com.example.neocafeteae1prototype.view.tools.mainLogging
+import com.example.neocafeteae1prototype.view.root.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UserViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
+class UserViewModel @Inject constructor(private val repository: MainRepository) : BaseViewModel() {
 
-    val userData = MutableLiveData<Resource<AllModels.User>>()
-    var bonus = 0
+    val userData = MutableLiveData<AllModels.User>()
+    var bonus = MutableLiveData<Int>()
+    override var errorLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
-    fun changeUserName(token:String, name:String){
+
+    fun changeUserName(name: String) {
         viewModelScope.launch {
-            repository.changeUserName(token, name)
+            repository.changeUserName(name)
         }
     }
 
 
-    fun getUserInfo(token:String){
-        "UserViewModel".mainLogging()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = async { repository.getUserInfo(token) }.await()
-
-            if (response is Resource.Success){
-                userData.postValue(Resource.Success(response.value))
+    fun getUserInfo() {
+        viewModelScope.launch {
+            repository.getUserInfo().let {
+                when (it) {
+                    is Resource.Failure -> errorLiveData.postValue(true)
+                    is Resource.Success -> this@UserViewModel.userData.postValue(it.value)
+                }
             }
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val bonusResponse = repository.getBonus(token)
-            if (bonusResponse.isSuccessful){
-                bonus = bonusResponse.body() ?: 0
+
+        viewModelScope.launch {
+            repository.getBonus().let {
+                if (it.isSuccessful) {
+                    bonus.postValue(it.body())
+                }
             }
         }
     }
-
-
-
 
 }

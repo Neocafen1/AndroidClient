@@ -16,17 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        style="@style/registration_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="@dimen/margin_77_dp"
-        android:layout_marginEnd="77dp"
-        android:text="@string/sign_in"
-        android:layout_marginTop="@dimen/margin_50_dp"
-        android:backgroundTint="@color/main_purple_enable_color"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/sign_in"

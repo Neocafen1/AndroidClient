@@ -28,6 +28,7 @@ class UserShoppingHistory : BaseFragment<FragmentUserShoppingHistoryBinding>(), 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecycler()
+        setUpButtonsListener()
     }
 
     private fun setUpRecycler() {
@@ -75,11 +76,11 @@ class UserShoppingHistory : BaseFragment<FragmentUserShoppingHistoryBinding>(), 
         }
     }
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?, ): FragmentUserShoppingHistoryBinding {
+    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): FragmentUserShoppingHistoryBinding {
         return FragmentUserShoppingHistoryBinding.inflate(inflater)
     }
 
-    override fun setUpButtonsListener() {
+    private fun setUpButtonsListener() {
         with(binding){
             clearReceipt.setOnClickListener { showAlertDialog() }
             bottomNavigationView.setOnClickListener{bottomNavigationView.selectedItemId = R.id.home_nav_graph}

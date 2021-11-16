@@ -94,6 +94,6 @@
             app:popUpToInclusive="true" />
         <argument
             android:name="phone_number"
-            app:argType="string" />
+            app:argType="integer" />
     </fragment>
 </navigation>

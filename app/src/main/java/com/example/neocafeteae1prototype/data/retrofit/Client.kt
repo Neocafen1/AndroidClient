@@ -5,23 +5,37 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
+import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object Client {
 
+
+    @Singleton
+    @Provides
+    fun getValidateInterceptor(): Interceptor {
+        return ValidateInterceptor()
+    }
+
+    @Singleton
     @Provides
     fun getInterceptor():OkHttpClient{
         return OkHttpClient.Builder()
+            .addInterceptor(getValidateInterceptor())
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .readTimeout(Consts.READ_TIMEOUT, TimeUnit.SECONDS)
+            .connectTimeout(Consts.CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .build()
     }
 
+    @Singleton
     @Provides
     fun getRegistrationClient(okHttpClient: OkHttpClient):Retrofit{
         return Retrofit.Builder()
@@ -31,16 +45,19 @@ object Client {
             .build()
     }
 
+    @Singleton
     @Provides
     fun getBranchesApi(retrofit:Retrofit):BranchAPI{
         return retrofit.create(BranchAPI::class.java)
     }
 
+    @Singleton
     @Provides
     fun getRegistrationApi(retrofit: Retrofit):RestApiRegistration{
         return retrofit.create(RestApiRegistration::class.java)
     }
 
+    @Singleton
     @Provides
     fun getUserApi(retrofit: Retrofit):UserAPI{
         return retrofit.create(UserAPI::class.java)

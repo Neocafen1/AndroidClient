@@ -13,7 +13,7 @@ import com.example.neocafeteae1prototype.view.tools.visible
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class BonusBottomSheet(val bonus: Int,val function: (String) -> Unit) : BaseBottomSheet<BonusAlertDialogItemBinding>() {
+class BonusBottomSheet(val bonus: Int,val function: (Int) -> Unit) : BaseBottomSheet<BonusAlertDialogItemBinding>() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -21,7 +21,7 @@ class BonusBottomSheet(val bonus: Int,val function: (String) -> Unit) : BaseBott
 
         editTextChangeListener()
         binding.ready.setOnClickListener {
-            function(binding.bonusEditText.text.toString())
+            function(binding.bonusEditText.text.toString().toInt())
         }
     }
 

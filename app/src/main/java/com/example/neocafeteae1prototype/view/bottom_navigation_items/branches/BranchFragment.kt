@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.neocafeteae1prototype.R
@@ -14,13 +15,15 @@ import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.databinding.FragmentMapBinding
 import com.example.neocafeteae1prototype.view.adapters.MainRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
+import com.example.neocafeteae1prototype.view.root.BaseFragmentWithErrorLiveData
 import com.example.neocafeteae1prototype.view.tools.delegates.RecyclerItemClickListener
 import com.example.neocafeteae1prototype.view.tools.showToast
 import com.example.neocafeteae1prototype.view_model.branches_vm.BranchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class BranchFragment : BaseFragment<FragmentMapBinding>(), RecyclerItemClickListener {
+class BranchFragment : BaseFragmentWithErrorLiveData<FragmentMapBinding>(),
+    RecyclerItemClickListener {
 
     private val branchViewModel: BranchViewModel by viewModels()
     private val myAdapter by lazy { MainRecyclerAdapter(this) }
@@ -35,17 +38,9 @@ class BranchFragment : BaseFragment<FragmentMapBinding>(), RecyclerItemClickList
             adapter = myAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
-        branchViewModel.listOfBranches.observe(viewLifecycleOwner){
-            when(it){
-                is Resource.Success ->{
-                    myAdapter.setList(it.value.filials)
-                    socialMedia = AllModels.SocialMedia(it.value.instagram, it.value.facebook)
-                }
-                is Resource.Failure -> {
-                    it.errorCode.toString().showToast(requireContext(), Toast.LENGTH_LONG)
-                }
-
-            }
+        branchViewModel.listOfBranches.observe(viewLifecycleOwner) {
+            myAdapter.setList(it.filials)
+            socialMedia = AllModels.SocialMedia(it.instagram, it.facebook)
         }
     }
 
@@ -55,7 +50,7 @@ class BranchFragment : BaseFragment<FragmentMapBinding>(), RecyclerItemClickList
     }
 
     override fun setUpToolbar() {
-        with(binding.include){
+        with(binding.include) {
             notification.setOnClickListener { findNavController().navigate(BranchFragmentDirections.actionBranchFragmentToNotification2()) }
             textView.text = resources.getText(R.string.mapping)
         }
@@ -64,4 +59,6 @@ class BranchFragment : BaseFragment<FragmentMapBinding>(), RecyclerItemClickList
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): FragmentMapBinding {
         return FragmentMapBinding.inflate(inflater)
     }
+
+    override fun errorListener(): LiveData<Boolean> = branchViewModel.errorLiveData
 }

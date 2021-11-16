@@ -1,147 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="330dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:layout_margin="@dimen/margin_start_16_dp"
-    android:background="@drawable/receipt_item_background">
+    android:layout_margin="@dimen/margin_10_dp"
+    app:cardElevation="8dp"
+    app:cardCornerRadius="16dp">
 
-    <TextView
-        android:id="@+id/when"
-        style="@style/TextView_14sp_Bold"
-        android:layout_marginStart="@dimen/margin_6_dp"
-        android:layout_marginTop="@dimen/margin_6_dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="5 minut ago" />
-
-    <TextView
-        android:id="@+id/time"
-        style="@style/TextView_14sp_Bold"
-        android:layout_marginTop="@dimen/margin_6_dp"
-        android:layout_marginEnd="@dimen/margin_6_dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="13 : 38" />
-
-    <LinearLayout
-        android:id="@+id/linear_layout"
-        android:layout_width="326dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/when">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/second_product_name"
-            style="@style/TextView_16sp_Bold"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:id="@+id/when"
+            style="@style/TextView_14sp_Bold"
             android:layout_marginStart="@dimen/margin_6_dp"
-            android:textColor="@color/white_grey"
-            tools:text="Product" />
+            android:layout_marginTop="@dimen/margin_6_dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="5 minut ago" />
 
         <TextView
-            android:id="@+id/second_product_price"
-            style="@style/TextView_16sp_Thin"
-            android:layout_gravity="center"
-            android:layout_marginStart="40dp"
-            android:textColor="@color/white_grey"
-            tools:text="240 c" />
+            android:id="@+id/time"
+            style="@style/TextView_14sp_Bold"
+            android:layout_marginTop="@dimen/margin_6_dp"
+            android:layout_marginEnd="@dimen/margin_6_dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="13 : 38" />
+
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/when">
+
+            <TextView
+                android:id="@+id/second_product_name"
+                style="@style/TextView_18sp_Bold"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                android:layout_marginStart="@dimen/margin_6_dp"
+                android:textColor="#545356"
+                tools:text="Product" />
+
+            <TextView
+                android:id="@+id/second_product_price"
+                style="@style/TextView_16sp_Thin"
+                android:layout_gravity="center"
+                android:layout_marginStart="40dp"
+                android:textColor="@color/white_grey"
+                tools:text="240 c" />
+
+            <TextView
+                android:id="@+id/second_product_county"
+                style="@style/TextView_16sp_Thin"
+                android:layout_gravity="center"
+                android:layout_marginStart="40dp"
+                android:textColor="@color/white_grey"
+                tools:text="12 шт" />
+
+            <TextView
+                android:id="@+id/second_total_product_price"
+                style="@style/TextView_16sp_Thin"
+                android:layout_gravity="center"
+                android:layout_marginStart="40dp"
+                android:textColor="@color/white_grey"
+                tools:text="2880 c" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginStart="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_layout">
+
+            <TextView
+                android:id="@+id/product_name"
+                style="@style/TextView_18sp_Bold"
+                android:layout_width="100dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/margin_6_dp"
+                android:textColor="#545356"
+                tools:text="Product" />
+
+            <TextView
+                android:id="@+id/product_price"
+                style="@style/TextView_16sp_Thin"
+                android:layout_gravity="center"
+                android:layout_marginStart="40dp"
+                android:textColor="@color/white_grey"
+                tools:text="240 c" />
+
+            <TextView
+                android:id="@+id/product_county"
+                style="@style/TextView_16sp_Thin"
+                android:layout_gravity="center"
+                android:layout_marginStart="40dp"
+                android:textColor="@color/white_grey"
+                tools:text="12 шт" />
+
+            <TextView
+                android:id="@+id/total_product_price"
+                style="@style/TextView_16sp_Thin"
+                android:layout_gravity="center"
+                android:layout_marginStart="40dp"
+                android:textColor="@color/white_grey"
+                tools:text="2880 c" />
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/second_product_county"
-            style="@style/TextView_16sp_Thin"
-            android:layout_gravity="center"
-            android:layout_marginStart="40dp"
-            android:textColor="@color/white_grey"
-            tools:text="12 шт" />
+            android:id="@+id/textView20"
+            style="@style/TextView_18sp_Bold"
+            android:layout_marginStart="8dp"
+            android:text="..."
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linear" />
 
         <TextView
-            android:id="@+id/second_total_product_price"
-            style="@style/TextView_16sp_Thin"
-            android:layout_gravity="center"
-            android:layout_marginStart="40dp"
-            android:textColor="@color/white_grey"
-            tools:text="2880 c" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linear"
-        android:layout_width="326dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_layout">
-
-        <TextView
-            android:id="@+id/product_name"
-            style="@style/TextView_16sp_Bold"
-            android:layout_width="70dp"
-            android:layout_gravity="center"
+            style="@style/TextView_18sp_Bold"
             android:layout_marginStart="@dimen/margin_6_dp"
-            android:textColor="@color/white_grey"
-            tools:text="Product" />
+            android:layout_marginTop="5dp"
+            android:paddingBottom="@dimen/margin_10_dp"
+            android:text="@string/result"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="#545356"
+            app:layout_constraintTop_toBottomOf="@+id/textView20" />
 
         <TextView
-            android:id="@+id/product_price"
-            style="@style/TextView_16sp_Thin"
-            android:layout_gravity="center"
-            android:layout_marginStart="40dp"
-            android:textColor="@color/white_grey"
-            tools:text="240 c" />
+            android:id="@+id/total_price"
+            style="@style/TextView_18sp_Bold"
+            android:layout_marginTop="@dimen/margin_6_dp"
+            android:layout_marginEnd="@dimen/margin_6_dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView20"
+            tools:text="500" />
 
-        <TextView
-            android:id="@+id/product_county"
-            style="@style/TextView_16sp_Thin"
-            android:layout_gravity="center"
-            android:layout_marginStart="40dp"
-            android:textColor="@color/white_grey"
-            tools:text="12 шт" />
-
-        <TextView
-            android:id="@+id/total_product_price"
-            style="@style/TextView_16sp_Thin"
-            android:layout_gravity="center"
-            android:layout_marginStart="40dp"
-            android:textColor="@color/white_grey"
-            tools:text="2880 c" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView20"
-        style="@style/TextView_18sp_Bold"
-        android:layout_marginStart="@dimen/margin_6_dp"
-        android:text="..."
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linear" />
-
-    <TextView
-        style="@style/TextView_18sp_Bold"
-        android:layout_marginStart="@dimen/margin_6_dp"
-        android:layout_marginTop="@dimen/margin_6_dp"
-        android:paddingBottom="@dimen/margin_10_dp"
-        android:text="@string/result"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
-
-    <TextView
-        android:id="@+id/total_price"
-        style="@style/TextView_18sp_Bold"
-        android:layout_marginTop="@dimen/margin_6_dp"
-        android:layout_marginEnd="@dimen/margin_6_dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView20"
-        tools:text="500" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

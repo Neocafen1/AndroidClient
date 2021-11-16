@@ -22,7 +22,6 @@ class RegistrationViewModel @Inject constructor(private val repository: MainRepo
     var userCreated = MutableLiveData<Boolean>()
     var tokens = MutableLiveData<AllModels.JWT_token>()
     var isNumberLocateInDB = MutableLiveData<Boolean>()
-    val userInfo = MutableLiveData<Resource<AllModels.User>>()
     private lateinit var request:Response<String>
 
 
@@ -58,15 +57,7 @@ class RegistrationViewModel @Inject constructor(private val repository: MainRepo
             val request = repository.getJWTtoken(number, uid)
             if (request.isSuccessful) {
                 tokens.postValue(request.body())
-            } else
-                return@launch
-        }
-    }
-
-    fun getUserInfo(token: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = async { repository.getUserInfo(token) }.await()
-                userInfo.postValue(response)
+            }
         }
     }
 }

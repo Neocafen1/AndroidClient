@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.databinding.AlertDialogLayoutBinding
+import kotlin.reflect.KFunction1
 
 
 class ShoppingAlertDialog(
     var function: () -> Unit,
-    var function2: () -> Unit,
+    val function2: (Int) -> Unit,
     var title: String?,
     var message: String?
 ) : BaseAlertDialog<AlertDialogLayoutBinding>() {
@@ -43,12 +44,10 @@ class ShoppingAlertDialog(
 
         binding.positiveButton.setOnClickListener {
             function()
-            dismiss()
         }
 
         binding.negativeButton.setOnClickListener {
-            function2()
-            dismiss()
+            function2(0)
         }
     }
 }

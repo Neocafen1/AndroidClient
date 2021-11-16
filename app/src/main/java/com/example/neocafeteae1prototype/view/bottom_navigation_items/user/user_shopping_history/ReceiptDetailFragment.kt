@@ -23,6 +23,7 @@ class ReceiptDetailFragment : BaseFragment<FragmentReceiptDetailBinding>() {
         super.onViewCreated(view, savedInstanceState)
         setUpUi(safeArgs.receiptModel)
         setUpRecyclerView()
+        setUpButtonsListener()
     }
 
     private fun setUpRecyclerView() {
@@ -52,7 +53,7 @@ class ReceiptDetailFragment : BaseFragment<FragmentReceiptDetailBinding>() {
         return FragmentReceiptDetailBinding.inflate(inflater)
     }
 
-    override fun setUpButtonsListener() {
+    fun setUpButtonsListener() {
         binding.repeatOrder.setOnClickListener {  }
     }
 }
