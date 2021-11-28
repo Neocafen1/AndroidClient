@@ -59,7 +59,7 @@ class ShoppingRecyclerAdapter(private val clicker:RecyclerItemClickListener, pri
                 notifyItemChanged(position)
                 if (county == 0){
                     list.removeAt(position)
-                    secondItemClickListener.holderClicked(null)
+                    secondItemClickListener.holderClicked(null, position)
                     notifyDataSetChanged()
                 }
             }

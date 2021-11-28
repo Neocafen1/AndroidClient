@@ -159,7 +159,7 @@ class GetMessageAuthorization : Fragment() {
     private fun getData(){
         _binding?.progress?.visible()
         val uid = FirebaseAuth.getInstance().uid
-        viewModel.JWTtoken(localDatabase.fetchUserNumber(), uid!!)
+        viewModel.JWTtoken(phoneNumber, uid!!)
         viewModel.tokens.observe(viewLifecycleOwner){
             localDatabase.saveAccessToken(it.access)
             localDatabase.saveRefreshToken(it.refresh)

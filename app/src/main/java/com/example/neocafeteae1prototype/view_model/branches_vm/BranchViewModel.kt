@@ -15,11 +15,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BranchViewModel @Inject constructor(private val repository: MainRepository) :
-    BaseViewModel() {
+class BranchViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
     val listOfBranches = MutableLiveData<AllModels.Branches>()
-    override var errorLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
     init {
         getAllBranches()
@@ -28,10 +26,7 @@ class BranchViewModel @Inject constructor(private val repository: MainRepository
     private fun getAllBranches() {
         viewModelScope.launch {
             repository.getAllBranches().let {
-                when (it) {
-                    is Resource.Failure -> errorLiveData.postValue(true)
-                    is Resource.Success -> listOfBranches.postValue(it.value!!)
-                }
+                if(it is Resource.Success) this@BranchViewModel.listOfBranches.postValue(it.value)
             }
         }
     }

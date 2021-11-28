@@ -5,20 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.neocafeteae1prototype.R
-import com.example.neocafeteae1prototype.data.Consts
-import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.databinding.FragmentShoppingOrderBinding
 import com.example.neocafeteae1prototype.view.adapters.MainRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.DoneAlertDialog
-import com.example.neocafeteae1prototype.view.tools.mainLogging
 import com.example.neocafeteae1prototype.view.tools.notVisible
 import com.example.neocafeteae1prototype.view.tools.visible
+import com.example.neocafeteae1prototype.view_model.main_vm.MainViewModel
+import com.example.neocafeteae1prototype.view_model.menu_shopping_vm.SharedViewModel
 import com.example.neocafeteae1prototype.view_model.menu_shopping_vm.ShoppingOrderViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -31,7 +30,7 @@ class ShoppingOrderFragment : BaseFragment<FragmentShoppingOrderBinding>() {
     private var totalPrice = 0
     private val recyclerAdapter by lazy {MainRecyclerAdapter(null)}
     private val viewModel by viewModels<ShoppingOrderViewModel>()
-    private val nav by lazy {findNavController()}
+    private val shaveViewModel by activityViewModels<SharedViewModel>()
 
 
     @SuppressLint("SetTextI18n")
@@ -49,8 +48,6 @@ class ShoppingOrderFragment : BaseFragment<FragmentShoppingOrderBinding>() {
             result.text = "${totalPrice.minus(args.bonus)} c"
             takeOrder.setOnClickListener { sendProducts() }
         }
-
-
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -63,11 +60,13 @@ class ShoppingOrderFragment : BaseFragment<FragmentShoppingOrderBinding>() {
     }
 
     private fun sendProducts() {
-//        viewModel.sendProductList()
+        viewModel.sendProductList(50, args.inCafe)
         binding.progress.visible()
         viewModel.isProductListSent.observe(viewLifecycleOwner){
             if (it){
                 binding.progress.notVisible()
+                shaveViewModel.updateProductList()
+                navController.navigateUp()
                 DoneAlertDialog("Ваш заказ оформлен").show(childFragmentManager, "TAG")
             }
         }
@@ -87,8 +86,8 @@ class ShoppingOrderFragment : BaseFragment<FragmentShoppingOrderBinding>() {
 
     override fun setUpToolbar() {
         with(binding.include){
-            backButton.setOnClickListener{nav.navigateUp()}
-            notification.setOnClickListener { nav.navigate(ShoppingOrderFragmentDirections.actionShoppingOrderFragment2ToNotification3()) }
+            backButton.setOnClickListener{navController.navigateUp()}
+            notification.setOnClickListener { navController.navigate(ShoppingOrderFragmentDirections.actionShoppingOrderFragment2ToNotification3()) }
         }
     }
 }

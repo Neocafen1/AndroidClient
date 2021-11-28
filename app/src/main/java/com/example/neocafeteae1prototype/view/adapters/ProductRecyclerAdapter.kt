@@ -64,7 +64,7 @@ class ProductRecyclerAdapter(private val clicker: SecondItemClickListener?) :
         }
 
         holder.itemView.setOnClickListener {
-            clicker?.holderClicked(list[position])
+            clicker?.holderClicked(list[position], position)
         }
     }
 

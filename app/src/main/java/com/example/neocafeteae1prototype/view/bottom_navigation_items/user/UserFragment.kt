@@ -6,12 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.navigation.fragment.findNavController
-import com.example.neocafeteae1prototype.data.Consts
 import com.example.neocafeteae1prototype.databinding.FragmentUserBinding
 import com.example.neocafeteae1prototype.view.root.BaseFragment
-import com.example.neocafeteae1prototype.view.root.BaseFragmentWithErrorLiveData
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.CustomAlertDialog
 import com.example.neocafeteae1prototype.view.tools.notVisible
 import com.example.neocafeteae1prototype.view_model.user_vm.UserViewModel
@@ -19,10 +15,9 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class UserFragment : BaseFragmentWithErrorLiveData<FragmentUserBinding>() {
+class UserFragment : BaseFragment<FragmentUserBinding>() {
 
     private val viewModel by viewModels<UserViewModel>()
-    private val nav by lazy { findNavController() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,18 +60,16 @@ class UserFragment : BaseFragmentWithErrorLiveData<FragmentUserBinding>() {
                     .show(childFragmentManager, "TAG")
             }
         }
-        binding.shoppingHistory.setOnClickListener { nav.navigate(UserFragmentDirections.actionUserFragmentToUserShoppingHistory())
+        binding.shoppingHistory.setOnClickListener { navController.navigate(UserFragmentDirections.actionUserFragmentToUserShoppingHistory())
         }
     }
-
-    override fun errorListener(): LiveData<Boolean> = viewModel.errorLiveData
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): FragmentUserBinding {
         return FragmentUserBinding.inflate(inflater)
     }
 
     override fun setUpToolbar() {
-        binding.include.notification.setOnClickListener { nav.navigate(UserFragmentDirections.actionUserFragmentToNotification5()) }
+        binding.include.notification.setOnClickListener { navController.navigate(UserFragmentDirections.actionUserFragmentToNotification5()) }
     }
 }
 

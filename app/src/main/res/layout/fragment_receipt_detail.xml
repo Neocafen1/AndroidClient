@@ -52,9 +52,17 @@
                     style="@style/TextView_14sp_Bold"
                     android:layout_marginTop="@dimen/margin_6_dp"
                     android:layout_marginEnd="@dimen/margin_6_dp"
-                    android:text="13 : 38"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/date"
+                    style="@style/TextView_14sp_Bold"
+                    android:layout_marginTop="@dimen/margin_6_dp"
+                    android:layout_marginStart="@dimen/margin_6_dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
 
                 <View
                     android:id="@+id/border"
@@ -76,7 +84,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:layout_marginTop="5dp"
                     android:background="#C0C0C0"
                     app:layout_constraintStart_toStartOf="parent"

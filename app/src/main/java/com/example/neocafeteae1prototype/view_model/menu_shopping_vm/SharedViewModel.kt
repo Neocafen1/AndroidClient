@@ -8,22 +8,17 @@ import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.repository.MainRepository
-import com.example.neocafeteae1prototype.view.root.BaseViewModel
-import com.example.neocafeteae1prototype.view.tools.mainLogging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SharedViewModel @Inject constructor(private val repository: MainRepository) :
-    BaseViewModel() {
+class SharedViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
-    override var errorLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-    private var sortedList = mutableListOf<AllModels.Popular>()
-    var bonus = 50
+    private var sortedList = mutableListOf<AllModels.Popular>() // сортированные данные
+    var bonus = 0
     val productList = MutableLiveData<MutableList<AllModels.Popular>>()
     val userData = MutableLiveData<AllModels.User>()
     val menuList = mutableListOf<AllModels.Menu>(
@@ -35,33 +30,29 @@ class SharedViewModel @Inject constructor(private val repository: MainRepository
     )
     val popularList = mutableListOf<AllModels.Popular>()
     val shoppingList = mutableListOf<AllModels.Popular>()
+    val isUserHaveTable = MutableLiveData<Boolean>()
 
     init {
         getAllProduct()
     }
 
-    fun getUserInfo() {
+    fun getUserInfo() { // Получаем иформацию о Юзере
         viewModelScope.launch {
             repository.getUserInfo().let {
-                when(it){
-                    is Resource.Failure -> errorLiveData.postValue(true)
-                    is Resource.Success -> userData.postValue(it.value!!)
-                }
+                if(it is Resource.Success) this@SharedViewModel.userData.postValue(it.value)
             }
         }
     }
 
-    private fun getAllProduct() {
+    private fun getAllProduct() { // Получаем все продукты
         viewModelScope.launch {
             repository.getAllProduct().let {
-                when(it){
-                    is Resource.Failure -> errorLiveData.postValue(true)
-                    is Resource.Success -> productList.postValue(it.value!!)
-                }
+                if(it is Resource.Success) this@SharedViewModel.productList.postValue(it.value)
             }
         }
     }
 
+    // Сортируем продукты по их категории
     fun sort(category: String, list: MutableList<AllModels.Popular>): MutableList<AllModels.Popular> {
         val myList = mutableListOf<AllModels.Popular>()
         return if (category == "Все") {
@@ -78,6 +69,7 @@ class SharedViewModel @Inject constructor(private val repository: MainRepository
         }
     }
 
+    // Берет все продукты где кол-во больше, такеи образом делаем корзину
     fun sortProductForShopping(list: MutableList<AllModels.Popular>) {
         shoppingList.clear()
         viewModelScope.launch {
@@ -89,10 +81,19 @@ class SharedViewModel @Inject constructor(private val repository: MainRepository
         }
     }
 
-    fun getPopularProduct(list: MutableList<AllModels.Popular>){
+    fun getPopularProduct(list: MutableList<AllModels.Popular>){ // возращает список популярных продуктов
         list.forEach {
             if (it.isPopular){
                 popularList.add(it)
+            }
+        }
+    }
+
+    // Проверка забронирован ли за юзером стол
+    fun checkIsUserHaveTable(){
+        viewModelScope.launch {
+            repository.isUserHaveTable().let {
+                if(it is Resource.Success) this@SharedViewModel.isUserHaveTable.postValue(it.value)
             }
         }
     }
@@ -105,12 +106,16 @@ class SharedViewModel @Inject constructor(private val repository: MainRepository
         return totalPrice
     }
 
-    fun getBonus(token:String){
+    fun getBonus(){
         CoroutineScope(Dispatchers.IO).launch {
             val bonusResponse = repository.getBonus()
             if (bonusResponse.isSuccessful){
                 bonus = bonusResponse.body() ?: 0
             }
         }
+    }
+
+    fun updateProductList(){
+        getAllProduct()
     }
 }

@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.neocafeteae1prototype.R
-import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.databinding.FragmentPopularBinding
 import com.example.neocafeteae1prototype.view.adapters.ProductRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
@@ -43,8 +41,8 @@ class PopularFragment : BaseFragment<FragmentPopularBinding>() {
     override fun setUpToolbar() {
         with(binding.include){
             textView.text = resources.getText(R.string.popular)
-            backButton.setOnClickListener { findNavController().navigateUp() }
-            notification.setOnClickListener { findNavController().navigate(PopularFragmentDirections.actionPopularFragmentToNotification()) }
+            backButton.setOnClickListener { navController.navigateUp() }
+            notification.setOnClickListener { navController.navigate(PopularFragmentDirections.actionPopularFragmentToNotification()) }
         }
     }
 }

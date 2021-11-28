@@ -26,7 +26,7 @@ class EmptyIllustrativeFragment : BaseFragment<FragmentEmptyIllustrativeBinding>
       sharedViewModel.productList.observe(viewLifecycleOwner) {
          sharedViewModel.sortProductForShopping(it)
          if (sharedViewModel.shoppingList.isNotEmpty()) {
-            findNavController().navigateUp()
+            navController.navigateUp()
          }
       }
    }
@@ -37,8 +37,8 @@ class EmptyIllustrativeFragment : BaseFragment<FragmentEmptyIllustrativeBinding>
    override fun setUpToolbar() {
       with(binding.include){
          textView.text = "Корзина"
-         backButton.setOnClickListener { findNavController().navigateUp() }
-         notification.setOnClickListener { findNavController().navigate(EmptyIllustrativeFragmentDirections.actionEmptyIllustrativeFragmentToNotification3()) }
+         backButton.setOnClickListener { navController.navigateUp() }
+         notification.setOnClickListener { navController.navigate(EmptyIllustrativeFragmentDirections.actionEmptyIllustrativeFragmentToNotification3()) }
       }
    }
 }

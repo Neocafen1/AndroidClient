@@ -15,4 +15,14 @@ interface UserAPI {
     @FormUrlEncoded
     @PATCH("userch/")
     suspend fun changeName(@Field("first_name") first_name:String)
+
+    @GET("ncafe/orders/history/")
+    suspend fun getOrderHistory():MutableList<AllModels.Receipt>
+
+    @DELETE("ncafe/orders/history/")
+    suspend fun deleteUserHistory():Boolean
+
+    @DELETE("ncafe/notifications/")
+    suspend fun deleteUserNotifications(@Query("type") type:String, @Query("id")id:Int):Boolean
+
 }

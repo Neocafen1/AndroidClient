@@ -26,10 +26,8 @@ abstract class TabNavigationClass(layout:Int): Fragment(layout){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i("TAG", "onViewCreated")
 
         currentNavController = findNavController()
-
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

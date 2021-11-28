@@ -63,6 +63,7 @@
             android:backgroundTint="#F5F6FB"
             android:layout_height="wrap_content"
             app:cardCornerRadius="15dp"
+            app:cardElevation="@null"
             android:layout_marginStart="@dimen/default_margin_start_16dp"
             android:layout_marginTop="@dimen/margin_10_dp"
             android:layout_marginEnd="@dimen/default_margin_start_16dp"
@@ -84,7 +85,7 @@
             style="@style/Toolbar_title_text"
             android:layout_marginStart="@dimen/default_margin_start_16dp"
             android:text="@string/result"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="70dp"
             android:textColor="@color/title_grey"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView5" />

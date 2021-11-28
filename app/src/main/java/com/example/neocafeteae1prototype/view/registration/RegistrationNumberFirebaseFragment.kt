@@ -54,7 +54,7 @@ class RegistrationNumberFirebaseFragment : BaseFragment<FragmentRegistrationNumb
         val unMaskedNumber = MaskedFormatter("###-###-###").formatString(binding.numberPhoneTextView.text.toString())?.unMaskedString
         sharedPreferences.saveUserNumber(unMaskedNumber.toString().toInt())
         sharedPreferences.saveUserName(name)
-        findNavController().navigate(
+        navController.navigate(
             RegistrationNumberFirebaseFragmentDirections.actionRegistrationNumberFirebaseFragmentToReceiveMessageFirebaseFragment(unMaskedNumber.toString())
         )
     }

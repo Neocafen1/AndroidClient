@@ -2,44 +2,48 @@ package com.example.neocafeteae1prototype.view_model.menu_shopping_vm
 
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.neocafeteae1prototype.data.models.AllModels
+import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.repository.MainRepository
-import com.example.neocafeteae1prototype.view.root.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ShoppingOrderViewModel @Inject constructor(private val repository: MainRepository) : BaseViewModel() {
+class ShoppingOrderViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
     val productList = mutableListOf<AllModels.Product>()
     val isProductListSent = MutableLiveData<Boolean>()
-    override var errorLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
-    fun getProductList(list: MutableList<AllModels.Popular>){
+    fun getProductList(list: MutableList<AllModels.Popular>){ // Меняю на другую модел так как она используется в recycler adapter
         list.map {
-            productList.add(AllModels.Product(it.title, it.price.toString(), it.county.toString(), getTotalPrice(it.county, it.price),it.id ))
+            productList.add(AllModels.Product(it.price, it.id, it.title, it.county, getTotalPrice(it.county, it.price)))
         }
     }
 
-    private fun getTotalPrice(county: Int, price: Int): String {
-        return "${county*price}"
+    private fun getTotalPrice(county: Int, price: Int): Int { // Возвращает сумму продукта
+        return county * price
     }
 
-    fun sendProductList(tableId: String?, bonus: Int, token:String) {
-        val list = mutableListOf<AllModels.FinishProduct>()
-        val order = AllModels.Order(1, bonus)
+    fun sendProductList(bonus: Int, inCafe: Boolean) {
+        val list = mutableListOf<AllModels.OrderItem>()
+        val order = AllModels.Order(bonus)
         productList.map {
-            list.add(AllModels.FinishProduct(it.id, it.county.toInt()))
+            list.add(AllModels.OrderItem(it.productId, it.quantity))
         }
 
         viewModelScope.launch {
-            repository.sendProductList(order, list as List<AllModels.FinishProduct>).let {
-              /*  when(it){
-                    is Resource.Failure -> errorLiveData.postValue(true)
-                    is Resource.Success -> isProductListSent.postValue(true)
-                }*/
+            val finishOrder = AllModels.FinishProduct(order, list)
+            if (inCafe){
+                repository.sendProductList(finishOrder).let {
+                    if (it is Resource.Success) this@ShoppingOrderViewModel.isProductListSent.postValue(it.value)
+                }
+            }else{
+                repository.createOrderTakeOut(finishOrder).let {
+                    if (it is Resource.Success) this@ShoppingOrderViewModel.isProductListSent.postValue(it.value)
+                }
             }
         }
     }

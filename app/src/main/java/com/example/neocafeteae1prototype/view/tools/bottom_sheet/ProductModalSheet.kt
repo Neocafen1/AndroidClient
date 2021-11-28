@@ -13,7 +13,7 @@ import com.example.neocafeteae1prototype.view.tools.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class ProductModalSheet(val model : AllModels.Popular) : BaseBottomSheet<FragmentProductBinding>() {
+class ProductModalSheet(private val model: AllModels.Popular,private val function: () -> Unit) : BaseBottomSheet<FragmentProductBinding>() {
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -76,6 +76,7 @@ class ProductModalSheet(val model : AllModels.Popular) : BaseBottomSheet<Fragmen
                 if (county == 0){
                     county++
                     binding.quantity.text = county.toString()
+                    function()
                 }
                 changeVisibility(county)
             }
@@ -83,6 +84,7 @@ class ProductModalSheet(val model : AllModels.Popular) : BaseBottomSheet<Fragmen
             binding.addButton.setOnClickListener {
                 this.county += 1
                 binding.quantity.text = this.county.toString()
+                function()
             }
             binding.removeButton.setOnClickListener {
                 this.county -= 1
@@ -90,6 +92,7 @@ class ProductModalSheet(val model : AllModels.Popular) : BaseBottomSheet<Fragmen
                 if (county == 0){
                     changeVisibility(county)
                 }
+                function()
             }
             binding.addElement.setOnClickListener {
                 dismiss()

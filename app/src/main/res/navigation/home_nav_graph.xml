@@ -14,9 +14,6 @@
             android:id="@+id/action_homeFragment_to_notification"
             app:destination="@id/notification" />
         <action
-            android:id="@+id/action_homeFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_menuFragment"
             app:destination="@id/menuFragment"
             app:enterAnim="@anim/up_in"
@@ -37,11 +34,6 @@
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" />
     <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.example.neocafeteae1prototype.view.bottom_navigation_items.home.home_search.SearchFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
-    +<fragment
         android:id="@+id/menuFragment"
         android:name="com.example.neocafeteae1prototype.view.bottom_navigation_items.home.menu.MenuFragment"
         android:label="fragment_menu"

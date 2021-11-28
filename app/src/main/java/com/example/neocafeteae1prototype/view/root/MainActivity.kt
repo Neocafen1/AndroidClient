@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         connectionLiveData = ConnectionLiveData(this) // Слушаетель интернета
 
-        val snackbar = Snackbar.make(binding.view, "No Internet", Snackbar.LENGTH_INDEFINITE).apply {
+        val snackbar = Snackbar.make(binding.view, "Включите интернет", Snackbar.LENGTH_INDEFINITE).apply {
                 setBackgroundTint(ContextCompat.getColor(this@MainActivity, R.color.red))
             }
 

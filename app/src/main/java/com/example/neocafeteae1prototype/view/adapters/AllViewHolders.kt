@@ -60,24 +60,27 @@ sealed class AllViewHolders(binding: ViewBinding) : RecyclerView.ViewHolder(bind
 
         fun bind(item : AllModels.Receipt){
 
-            val firstProduct = item.list[0]
-            val secondProduct = item.list[1]
+            val firstProduct = item.details.orderItems[0]
+            val secondProduct = item.details.orderItems[1]
 
             with(binding){
                 with(item){
-                    `when`.text = time
-                    setUpProductList(productName, productPrice, productCounty, totalProductPrice, firstProduct)
-                    setUpProductList(secondProductName, secondProductPrice, secondProductCounty, secondTotalProductPrice, secondProduct)
+                    binding.date.text = date
+                    binding.time.text = time
+                    binding.totalPrice.text = "$finalPrice c"
+                    setUpProductList(productName, productPrice, productCounty, totalProductPrice, firstProduct, item.finalPrice)
+                    setUpProductList(secondProductName, secondProductPrice, secondProductCounty, secondTotalProductPrice, secondProduct, item.finalPrice)
                 }
             }
         }
 
-        private fun setUpProductList(name: TextView, price:TextView, county:TextView, totalProductPrice:TextView, data: AllModels.Product){
-            name.text = data.productName
-            price.text = data.productPrice
-            county.text = data.county
-            totalProductPrice.text = data.totalProductPrice
-
+        // Установ данные о первых 2 элементах
+        @SuppressLint("SetTextI18n")
+        private fun setUpProductList(name: TextView, price:TextView, county:TextView, totalProductPrice:TextView, data: AllModels.Product, totalPrice:Int){
+            name.text = data.productTitle
+            price.text = "${data.price} c"
+            county.text = "${data.quantity} шт"
+            totalProductPrice.text = "${data.sum} c"
         }
     }
 
@@ -86,11 +89,10 @@ sealed class AllViewHolders(binding: ViewBinding) : RecyclerView.ViewHolder(bind
         @SuppressLint("SetTextI18n")
         fun bind(item: AllModels.Product){
                 with(binding){
-                    productName.text = item.productName
-                    productPrice.text = "${item.productPrice} c "
-                    productCounty.text = "${item.county} шт"
-                    val a = item.county.toInt() * item.productPrice.toInt()
-                    totalProductPrice.text = "$a c"
+                    productName.text = item.productTitle
+                    productPrice.text = "${item.price} c "
+                    productCounty.text = "${item.quantity} шт"
+                    totalProductPrice.text = "${item.sum} c"
             }
         }
     }

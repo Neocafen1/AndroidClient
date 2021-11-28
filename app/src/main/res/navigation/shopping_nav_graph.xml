@@ -48,5 +48,7 @@
         <argument
             android:name="bonus"
             app:argType="integer" />
+        <argument android:name="inCafe"
+            app:argType="boolean" />
     </fragment>
 </navigation>

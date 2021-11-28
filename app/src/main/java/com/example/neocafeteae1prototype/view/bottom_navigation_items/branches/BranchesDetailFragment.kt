@@ -22,7 +22,6 @@ class BranchesDetailFragment : BaseFragment<FragmentDetailBranchBinding>() {
     private val args: BranchesDetailFragmentArgs by navArgs()
     private val recyclerAdapter = MainRecyclerAdapter(null)
     private lateinit var intent: Intent
-    private val nav by lazy {findNavController()}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,10 +40,10 @@ class BranchesDetailFragment : BaseFragment<FragmentDetailBranchBinding>() {
     override fun setUpToolbar() {
         with(binding.include) {
             notification.setOnClickListener {
-                nav.navigate(BranchesDetailFragmentDirections.actionBranchesDetailFragmentToNotification2())
+                navController.navigate(BranchesDetailFragmentDirections.actionBranchesDetailFragmentToNotification2())
             }
             backButton.setOnClickListener {
-                nav.navigateUp()
+                navController.navigateUp()
             }
         }
     }

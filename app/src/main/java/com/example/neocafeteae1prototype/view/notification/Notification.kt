@@ -8,17 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.neocafeteae1prototype.R
-import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.data.Consts
-import com.example.neocafeteae1prototype.view.adapters.MainRecyclerAdapter
 import com.example.neocafeteae1prototype.databinding.FragmentNotificationBinding
-import com.example.neocafeteae1prototype.view.root.BaseFragmentWithErrorLiveData
+import com.example.neocafeteae1prototype.view.adapters.MainRecyclerAdapter
+import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view_model.notification_vm.NotificationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
@@ -41,7 +38,7 @@ class Notification : BaseFragment<FragmentNotificationBinding>() {
                 return false
             }
 
-            override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean, ) {
+            override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
                 RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                         .addSwipeLeftBackgroundColor(Color.parseColor(Consts.ENABLE_COLOR))
                         .addActionIcon(R.drawable.ic_trash)
@@ -56,9 +53,9 @@ class Notification : BaseFragment<FragmentNotificationBinding>() {
 
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        Toast.makeText(requireContext(), "$position", Toast.LENGTH_LONG).show()
                         viewModel.list.removeAt(position)
-                        recyclerAdapter?.notifyItemRemoved(position)
+                        recyclerAdapter.notifyItemRemoved(position)
+                        viewModel.deleteNotificationsById(position)
                     }
                 }
             }
@@ -77,7 +74,7 @@ class Notification : BaseFragment<FragmentNotificationBinding>() {
     }
 
     override fun setUpToolbar() {
-        binding.back.setOnClickListener { findNavController().navigateUp() }
+        binding.back.setOnClickListener { navController.navigateUp() }
     }
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): FragmentNotificationBinding {

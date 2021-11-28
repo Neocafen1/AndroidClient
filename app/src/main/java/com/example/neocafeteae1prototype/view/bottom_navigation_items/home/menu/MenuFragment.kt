@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.neocafeteae1prototype.R
@@ -67,7 +66,6 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(), RecyclerItemClickListe
     }
 
     override fun setUpToolbar() {
-        val navController = findNavController()
         with(binding.include) {
             textView.text = resources.getText(R.string.Menu)
             backButton.setOnClickListener { navController.navigateUp() }
@@ -82,7 +80,7 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(), RecyclerItemClickListe
     }
 
     override fun itemClicked(item: AllModels?) {
-        ProductModalSheet(item as AllModels.Popular).show(childFragmentManager, "TAG")
+//        ProductModalSheet(item as AllModels.Popular) { recyclerDataChanged(position) }.show(childFragmentManager, "TAG")
     }
 
 }

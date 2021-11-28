@@ -4,7 +4,6 @@ import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.data.models.SafeApiCall
 import com.example.neocafeteae1prototype.data.retrofit.*
-import com.example.neocafeteae1prototype.view.tools.bearerToken
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -57,7 +56,7 @@ class MainRepository @Inject constructor(
         return userAPI.changeName(name)
     }
 
-    suspend fun checkTable(table: String): Resource<AllModels.Table?> {
+    suspend fun checkTable(table: String): Resource<AllModels.Table> {
         return safeApiCall { qrApi.checkTable(table) }
     }
 
@@ -69,11 +68,28 @@ class MainRepository @Inject constructor(
         return safeApiCall { shoppingAPI.getAllProduct() }
     }
 
-    suspend fun sendProductList(
-        order: AllModels.Order,
-        productList: List<AllModels.FinishProduct>,
-    ) {
-        return shoppingAPI.sendProductList(order, productList)
+    suspend fun sendProductList(list:AllModels.FinishProduct):Resource<Boolean> {
+        return safeApiCall { shoppingAPI.sendProductList(list) }
+    }
+
+    suspend fun orderHistory():Resource<MutableList<AllModels.Receipt>>{
+        return safeApiCall { userAPI.getOrderHistory() }
+    }
+
+    suspend fun createOrderTakeOut(list: AllModels.FinishProduct):Resource<Boolean>{
+        return safeApiCall { shoppingAPI.createOrderTakeOut(list) }
+    }
+
+    suspend fun isUserHaveTable():Resource<Boolean>{
+        return safeApiCall { qrApi.isUserHaveTable() }
+    }
+
+    suspend fun deleteUserHistory():Resource<Boolean>{
+        return safeApiCall { userAPI.deleteUserHistory() }
+    }
+
+    suspend fun deleteNotifications(id:Int):Resource<Boolean>{
+        return safeApiCall { userAPI.deleteUserNotifications("C", id) }
     }
 
 }
