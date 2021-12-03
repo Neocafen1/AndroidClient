@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.neocafeteae1prototype.data.Consts
@@ -16,6 +15,7 @@ import com.example.neocafeteae1prototype.view.adapters.MainRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.CustomAlertDialog
 import com.example.neocafeteae1prototype.view.tools.loadWithGlide
+import com.example.neocafeteae1prototype.view.tools.navigate
 
 class BranchesDetailFragment : BaseFragment<FragmentDetailBranchBinding>() {
 
@@ -40,7 +40,7 @@ class BranchesDetailFragment : BaseFragment<FragmentDetailBranchBinding>() {
     override fun setUpToolbar() {
         with(binding.include) {
             notification.setOnClickListener {
-                navController.navigate(BranchesDetailFragmentDirections.actionBranchesDetailFragmentToNotification2())
+                navigate(BranchesDetailFragmentDirections.actionBranchesDetailFragmentToNotification2())
             }
             backButton.setOnClickListener {
                 navController.navigateUp()
@@ -66,7 +66,7 @@ class BranchesDetailFragment : BaseFragment<FragmentDetailBranchBinding>() {
             }
 
             call.setOnClickListener {
-                intent = Intent(Intent.ACTION_DIAL).setData(Uri.parse("tel:${param1.phone}"))
+                intent = Intent(Intent.ACTION_DIAL).setData(Uri.parse("tel:0${param1.phone}"))
                 startActivity(intent)
             }
             addressOfBranch.text = param1.adress
@@ -83,7 +83,7 @@ class BranchesDetailFragment : BaseFragment<FragmentDetailBranchBinding>() {
         startActivity(intent)
     }
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?, ): FragmentDetailBranchBinding {
+    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): FragmentDetailBranchBinding {
         return FragmentDetailBranchBinding.inflate(inflater)
     }
 }

@@ -48,6 +48,7 @@
                 android:layout_width="150dp"
                 android:layout_height="@dimen/margin_50_dp"
                 android:layout_marginTop="@dimen/margin_10_dp"
+                android:textAllCaps="false"
                 android:background="@drawable/button_enable_custom_style"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -68,10 +69,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_View"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
+                android:layout_height="0dp"
                 android:layout_marginTop="@dimen/default_margin_start_16dp"
+                android:clipToPadding="false"
                 android:layoutAnimation="@anim/layout_animation"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clear_receipt" />

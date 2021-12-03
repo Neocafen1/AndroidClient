@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.databinding.AlertDialogLayoutBinding
+import com.example.neocafeteae1prototype.view.tools.setSafeOnClickListener
 import kotlin.reflect.KFunction1
 
 
@@ -42,12 +43,14 @@ class ShoppingAlertDialog(
             binding.message.text = message
         }
 
-        binding.positiveButton.setOnClickListener {
+        binding.positiveButton.setSafeOnClickListener {
             function()
+            dismiss()
         }
 
-        binding.negativeButton.setOnClickListener {
+        binding.negativeButton.setSafeOnClickListener {
             function2(0)
+            dismiss()
         }
     }
 }

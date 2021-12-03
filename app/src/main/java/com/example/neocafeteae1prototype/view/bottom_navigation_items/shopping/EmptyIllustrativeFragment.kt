@@ -37,7 +37,6 @@ class EmptyIllustrativeFragment : BaseFragment<FragmentEmptyIllustrativeBinding>
    override fun setUpToolbar() {
       with(binding.include){
          textView.text = "Корзина"
-         backButton.setOnClickListener { navController.navigateUp() }
          notification.setOnClickListener { navController.navigate(EmptyIllustrativeFragmentDirections.actionEmptyIllustrativeFragmentToNotification3()) }
       }
    }

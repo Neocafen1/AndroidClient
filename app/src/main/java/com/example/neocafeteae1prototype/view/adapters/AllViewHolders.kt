@@ -61,7 +61,6 @@ sealed class AllViewHolders(binding: ViewBinding) : RecyclerView.ViewHolder(bind
         fun bind(item : AllModels.Receipt){
 
             val firstProduct = item.details.orderItems[0]
-            val secondProduct = item.details.orderItems[1]
 
             with(binding){
                 with(item){
@@ -69,7 +68,10 @@ sealed class AllViewHolders(binding: ViewBinding) : RecyclerView.ViewHolder(bind
                     binding.time.text = time
                     binding.totalPrice.text = "$finalPrice c"
                     setUpProductList(productName, productPrice, productCounty, totalProductPrice, firstProduct, item.finalPrice)
-                    setUpProductList(secondProductName, secondProductPrice, secondProductCounty, secondTotalProductPrice, secondProduct, item.finalPrice)
+                    if (item.details.orderItems.size > 1){
+                        val secondProduct = item.details.orderItems[1]
+                        setUpProductList(secondProductName, secondProductPrice, secondProductCounty, secondTotalProductPrice, secondProduct, item.finalPrice)
+                    }
                 }
             }
         }
@@ -102,7 +104,7 @@ sealed class AllViewHolders(binding: ViewBinding) : RecyclerView.ViewHolder(bind
 
         fun bind(item: AllModels.Notification){
             with(binding){
-                message.text = item.message
+                message.text = item.description
                 title.text = item.title
                 time.text = item.time
             }

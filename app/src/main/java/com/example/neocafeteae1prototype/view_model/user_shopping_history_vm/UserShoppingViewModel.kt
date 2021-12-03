@@ -17,8 +17,8 @@ class UserShoppingViewModel @Inject constructor(private val repository: MainRepo
 
     val orderList = MutableLiveData<MutableList<AllModels.Receipt>>()
     val isProductListSent = MutableLiveData<Boolean>()
-    val isUserHaveTable = MutableLiveData<Boolean>()
-    val isHistoryDeleted = MutableLiveData<Boolean>()
+    val isUserHaveTable = MutableLiveData<AllModels.QrTable?>()
+    val isHistoryDeleted = MutableLiveData<Boolean?>()
 
     fun deleteUserHistory(){
         viewModelScope.launch {
@@ -45,13 +45,13 @@ class UserShoppingViewModel @Inject constructor(private val repository: MainRepo
         }
     }
 
-    fun sendProductList(list: List<AllModels.Product>, bonus: Int) {
+    fun sendProductList(productList: List<AllModels.Product>, bonus: Int) {
+        isProductListSent.postValue(false)
         val list = mutableListOf<AllModels.OrderItem>()
         val order = AllModels.Order(bonus)
-        list.map {
+        productList.map {
             list.add(AllModels.OrderItem(it.productId, it.quantity))
         }
-
         viewModelScope.launch {
             val finishOrder = AllModels.FinishProduct(order, list)
             repository.sendProductList(finishOrder).let {

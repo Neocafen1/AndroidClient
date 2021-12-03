@@ -11,9 +11,9 @@ interface QR_API {
     suspend fun checkTable(@Path(value = "filial1table1", encoded = true) table:String): AllModels.Table
 
     @POST("ncafe/tables/{filial1table1}/")
-    suspend fun lockTable(@Path(value = "filial1table1", encoded = true) table: String): AllModels.Table?
+    suspend fun lockTable(@Path(value = "filial1table1", encoded = true) table: String): Boolean
 
     @GET("ncafe/tables/my-tables/")
-    suspend fun isUserHaveTable():Boolean
+    suspend fun isUserHaveTable():AllModels.QrTable
 }
 

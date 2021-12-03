@@ -25,4 +25,10 @@ interface UserAPI {
     @DELETE("ncafe/notifications/")
     suspend fun deleteUserNotifications(@Query("type") type:String, @Query("id")id:Int):Boolean
 
+    @GET("ncafe/notifications/?type=C")
+    suspend fun getNotifications():MutableList<AllModels.Notification>
+
+    @DELETE("ncafe/notifications/?type=C")
+    suspend fun deleteAllNotifications():Boolean
+
 }

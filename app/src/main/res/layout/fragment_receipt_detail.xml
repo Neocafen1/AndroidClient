@@ -119,6 +119,7 @@
                 android:text="Повторить заказ"
                 android:padding="@dimen/default_margin_start_16dp"
                 android:textColor="@color/white"
+                android:textAllCaps="false"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/margin_20_dp"
                 android:layout_marginTop="@dimen/margin_30_dp"/>

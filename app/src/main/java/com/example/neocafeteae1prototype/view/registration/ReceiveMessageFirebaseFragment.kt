@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.databinding.FragmentReceiveMessageFirebaseBinding
+import com.example.neocafeteae1prototype.view.tools.navigate
 import com.example.neocafeteae1prototype.view.tools.showSnackBar
 import com.example.neocafeteae1prototype.view.tools.showToast
 import com.google.android.material.snackbar.Snackbar
@@ -112,7 +113,7 @@ class ReceiveMessageFirebaseFragment : Fragment() {
         FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    findNavController().navigate(ReceiveMessageFirebaseFragmentDirections.actionReceiveMessageFirebaseFragmentToRegistrationBirthdayFragment())
+                    navigate(ReceiveMessageFirebaseFragmentDirections.actionReceiveMessageFirebaseFragmentToRegistrationBirthdayFragment())
                 }
             }
     }
@@ -141,7 +142,7 @@ class ReceiveMessageFirebaseFragment : Fragment() {
     private fun signIn(phone: PhoneAuthCredential) {
         FirebaseAuth.getInstance().signInWithCredential(phone).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                findNavController().navigate(ReceiveMessageFirebaseFragmentDirections.actionReceiveMessageFirebaseFragmentToRegistrationBirthdayFragment())
+                navigate(ReceiveMessageFirebaseFragmentDirections.actionReceiveMessageFirebaseFragmentToRegistrationBirthdayFragment())
             }
         }
 

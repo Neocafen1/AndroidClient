@@ -9,6 +9,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/Constraint_Layout_Default">
 
+        <ProgressBar
+            android:id="@+id/progress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/standart_registration_progress_bar" />
+
         <TextView
             android:id="@+id/textView"
             android:layout_marginTop="@dimen/margin_156_dp"
@@ -22,7 +29,6 @@
             android:id="@+id/textView2"
             style="@style/TextView_14sp_Thin"
             android:textColor="@color/white"
-            android:layout_marginEnd="@dimen/margin_20_dp"
             android:layout_marginTop="@dimen/margin_35_dp"
             android:text="@string/name_registation_number"
             app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +58,6 @@
             android:textColor="@color/white"
             android:layout_marginTop="@dimen/margin_26_dp"
             android:text="@string/telephone_number_registation"
-            android:layout_marginEnd="@dimen/margin_10_dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView" />

@@ -8,6 +8,7 @@ import com.example.neocafeteae1prototype.view.tools.delegates.RecyclerItemClickL
 import com.example.neocafeteae1prototype.databinding.*
 import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.view.adapters.AllViewHolders
+import com.example.neocafeteae1prototype.view.tools.setSafeOnClickListener
 
 class MainRecyclerAdapter(private val recyclerItemClick: RecyclerItemClickListener?) :
     RecyclerView.Adapter<AllViewHolders>() {
@@ -76,20 +77,20 @@ class MainRecyclerAdapter(private val recyclerItemClick: RecyclerItemClickListen
         return when (holder) {
             is AllViewHolders.MenuItemViewHolder -> {
                 holder.bind(items[position] as AllModels.Menu)
-                holder.itemView.setOnClickListener {
+                holder.itemView.setSafeOnClickListener {
                     recyclerItemClick?.itemClicked(items[position])
                 }
             }
             is AllViewHolders.NeoCafeViewHolder -> {
                 holder.bind(items[position] as AllModels.Filial)
-                holder.itemView.setOnClickListener {
+                holder.itemView.setSafeOnClickListener {
                     recyclerItemClick?.itemClicked(items[position])
                 }
             }
             is AllViewHolders.BranchTimeWorkViewHolder -> holder.bind(items[position] as AllModels.Schedule)
             is AllViewHolders.ReceiptViewHolder -> {
                 holder.bind(items[position] as AllModels.Receipt)
-                holder.itemView.setOnClickListener {
+                holder.itemView.setSafeOnClickListener {
                     recyclerItemClick?.itemClicked(items[position])
                 }
             }

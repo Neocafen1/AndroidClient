@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.example.neocafeteae1prototype.data.internet_checker.ConnectionLiveData
 import com.example.neocafeteae1prototype.databinding.FragmentSignInOrRegistrationBinding
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.logging
+import com.example.neocafeteae1prototype.view.tools.navigate
 
 
 class SignInOrRegistrationFragment : BaseFragment<FragmentSignInOrRegistrationBinding>() {
@@ -19,10 +19,10 @@ class SignInOrRegistrationFragment : BaseFragment<FragmentSignInOrRegistrationBi
         super.onViewCreated(view, savedInstanceState)
         with(binding){
             signIn.setOnClickListener{
-                findNavController().navigate(SignInOrRegistrationFragmentDirections.actionSignInOrRegistrationFragmentToAuthWithNumberFragment())
+                navigate(SignInOrRegistrationFragmentDirections.actionSignInOrRegistrationFragmentToAuthWithNumberFragment())
             }
             register.setOnClickListener{
-                findNavController().navigate(SignInOrRegistrationFragmentDirections.actionSignInOrRegistrationFragmentToRegistrationNumberFirebaseFragment())
+                navigate(SignInOrRegistrationFragmentDirections.actionSignInOrRegistrationFragmentToRegistrationNumberFirebaseFragment())
             }
         }
     }

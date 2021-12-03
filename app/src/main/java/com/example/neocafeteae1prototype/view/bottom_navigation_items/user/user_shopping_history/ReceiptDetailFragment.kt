@@ -14,6 +14,8 @@ import com.example.neocafeteae1prototype.view.adapters.MainRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.CustomAlertDialog
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.DoneAlertDialog
+import com.example.neocafeteae1prototype.view.tools.navigate
+import com.example.neocafeteae1prototype.view.tools.setSafeOnClickListener
 import com.example.neocafeteae1prototype.view_model.user_shopping_history_vm.UserShoppingViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -28,25 +30,32 @@ class ReceiptDetailFragment : BaseFragment<FragmentReceiptDetailBinding>() {
         super.onViewCreated(view, savedInstanceState)
         setUpUi(safeArgs.receiptModel)
         setUpRecyclerView()
-        binding.repeatOrder.setOnClickListener {
+        binding.repeatOrder.setSafeOnClickListener {
             CustomAlertDialog(this::repeatOrder, "Вы точно хотите повторить заказ?", null).show(childFragmentManager, "TAG")
+        }
+
+        with(viewModel){
+            isProductListSent.observe(viewLifecycleOwner){result ->
+                if(result == true) {
+                    DoneAlertDialog("Ваш заказ оформлен") { navController.navigateUp() }.show(childFragmentManager, "TAG")
+                    viewModel.isProductListSent.postValue(false)
+                    viewModel.isUserHaveTable.postValue(null)
+                }
+            }
+            isUserHaveTable.observe(viewLifecycleOwner){
+                it?.let {
+                    if (!it.have_table){
+                        bottomNavigation.selectedItemId = R.id.qr_nav_graph
+                    }else{
+                        sendProductList(safeArgs.receiptModel.details.orderItems, 0)
+                    }
+                }
+            }
         }
     }
 
     private fun repeatOrder() {
-        with(viewModel){
-            checkIsUserHaveTable()
-            isUserHaveTable.observe(viewLifecycleOwner){
-                if (it){
-                    sendProductList(safeArgs.receiptModel.details.orderItems, 0)
-                    isProductListSent.observe(viewLifecycleOwner){result ->
-                        if(result) DoneAlertDialog("Заказ был успешно оформлен!").show(childFragmentManager, "TAG")
-                    }
-                }else{
-                    bottomNavigation.selectedItemId = R.id.qr_nav_graph
-                }
-            }
-        }
+        viewModel.checkIsUserHaveTable()
     }
 
     private fun setUpRecyclerView() {
@@ -69,7 +78,7 @@ class ReceiptDetailFragment : BaseFragment<FragmentReceiptDetailBinding>() {
     override fun setUpToolbar() {
         with(binding.include){
             backButton.setOnClickListener { navController.navigateUp() }
-            notification.setOnClickListener { navController.navigate(ReceiptDetailFragmentDirections.actionReceiptDetailFragmentToNotification5()) }
+            notification.setOnClickListener { navigate(ReceiptDetailFragmentDirections.actionReceiptDetailFragmentToNotification5()) }
             textView.text = resources.getText(R.string.history)
         }
     }

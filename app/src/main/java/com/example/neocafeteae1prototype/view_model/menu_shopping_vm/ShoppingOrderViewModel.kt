@@ -15,7 +15,7 @@ import javax.inject.Inject
 class ShoppingOrderViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
     val productList = mutableListOf<AllModels.Product>()
-    val isProductListSent = MutableLiveData<Boolean>()
+    val isProductListSent = MutableLiveData<Boolean?>()
 
     fun getProductList(list: MutableList<AllModels.Popular>){ // Меняю на другую модел так как она используется в recycler adapter
         list.map {

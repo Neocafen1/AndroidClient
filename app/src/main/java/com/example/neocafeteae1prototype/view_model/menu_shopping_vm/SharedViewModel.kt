@@ -28,9 +28,8 @@ class SharedViewModel @Inject constructor(private val repository: MainRepository
         AllModels.Menu("Десерты", R.drawable.desert),
         AllModels.Menu("Выпечка", R.drawable.cake),
     )
-    val popularList = mutableListOf<AllModels.Popular>()
     val shoppingList = mutableListOf<AllModels.Popular>()
-    val isUserHaveTable = MutableLiveData<Boolean>()
+    val isUserHaveTable = MutableLiveData<AllModels.QrTable>()
 
     init {
         getAllProduct()
@@ -81,12 +80,14 @@ class SharedViewModel @Inject constructor(private val repository: MainRepository
         }
     }
 
-    fun getPopularProduct(list: MutableList<AllModels.Popular>){ // возращает список популярных продуктов
+    fun getPopularProduct(list: MutableList<AllModels.Popular>): MutableList<AllModels.Popular> { // возращает список популярных продуктов
+        val popularList = mutableListOf<AllModels.Popular>()
         list.forEach {
             if (it.isPopular){
                 popularList.add(it)
             }
         }
+        return popularList
     }
 
     // Проверка забронирован ли за юзером стол
@@ -115,7 +116,9 @@ class SharedViewModel @Inject constructor(private val repository: MainRepository
         }
     }
 
-    fun updateProductList(){
-        getAllProduct()
+    fun deleteAllQuantity(){
+        productList.value?.forEach {
+            it.county = 0
+        }
     }
 }

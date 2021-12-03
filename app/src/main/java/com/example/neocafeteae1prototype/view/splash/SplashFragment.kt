@@ -13,6 +13,7 @@ import com.example.neocafeteae1prototype.databinding.FragmentSplashBinding
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.firebaseLogging
 import com.example.neocafeteae1prototype.view.tools.logging
+import com.example.neocafeteae1prototype.view.tools.navigate
 import com.example.neocafeteae1prototype.view_model.main_vm.MainViewModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
@@ -31,42 +32,25 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>() {
         super.onViewCreated(view, savedInstanceState)
         connectionLiveData = ConnectionLiveData(requireContext()) // Слушаетель интернета
         nextFragment()
-
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("TAG", "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-            task.addOnSuccessListener {
-                it.firebaseLogging()
-            }
-
-            // Get new FCM registration token
-            val token = task.result
-            token?.firebaseLogging()
-        })
     }
 
     private fun nextFragment() {
-//        connectionLiveData.observe(viewLifecycleOwner) {
-//            if (it) {
-//                if (FirebaseAuth.getInstance().uid == null) {
-//                    navController.navigate(SplashFragmentDirections.actionSplashFragmentToSignInOrRegistrationFragment())
-//                } else {
-//                    getToken()
-//                }
-//            }
-//
-//        }
-
-
-        getToken()
+        connectionLiveData.observe(viewLifecycleOwner) {
+            if (it) {
+                if (FirebaseAuth.getInstance().uid == null) {
+                    navigate(SplashFragmentDirections.actionSplashFragmentToSignInOrRegistrationFragment())
+                } else {
+                    getToken()
+                }
+            }
+        }
+//        getToken()
     }
 
     private fun getToken() {
         val uid = FirebaseAuth.getInstance().uid
-//        viewModel.JWTtoken(localDatabase.fetchUserNumber(), uid!!)
-        viewModel.JWTtoken(222222227, "test")
+        viewModel.JWTtoken(localDatabase.fetchUserNumber(), uid!!)
+//        viewModel.JWTtoken(222222227, "test")
         viewModel.list.observe(viewLifecycleOwner) {
             localDatabase.saveRefreshToken(it.refresh)
             localDatabase.saveAccessToken(it.access)
@@ -76,7 +60,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>() {
 
     private fun goToNextFragment() {
         if (localDatabase.fetchAccessToken() != null){
-            navController.navigate(R.id.action_splashFragment_to_bottomViewFragment3)
+            navigate(SplashFragmentDirections.actionSplashFragmentToBottomViewFragment3())
         }
     }
 

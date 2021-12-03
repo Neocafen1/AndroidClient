@@ -1,3 +1,5 @@
+
+
 package com.example.neocafeteae1prototype
 
 import android.app.NotificationChannel
@@ -10,7 +12,7 @@ import com.example.neocafeteae1prototype.view.tools.firebaseLogging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-class MyFireBaseService : FirebaseMessagingService() {
+class   MyFireBaseService : FirebaseMessagingService() {
 
     override fun onNewToken(p0: String) {
         p0.firebaseLogging()

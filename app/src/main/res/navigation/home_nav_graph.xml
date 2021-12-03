@@ -12,14 +12,18 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_notification"
-            app:destination="@id/notification" />
-        <action
-            android:id="@+id/action_homeFragment_to_menuFragment"
-            app:destination="@id/menuFragment"
+            app:destination="@id/notification"
             app:enterAnim="@anim/up_in"
             app:exitAnim="@anim/down_in"
             app:popEnterAnim="@anim/up_in"
             app:popExitAnim="@anim/down_in" />
+        <action
+            android:id="@+id/action_homeFragment_to_menuFragment"
+            app:destination="@id/menuFragment"
+            app:enterAnim="@anim/right_in"
+            app:exitAnim="@anim/left_in"
+            app:popEnterAnim="@anim/right_in"
+            app:popExitAnim="@anim/left_in" />
         <action
             android:id="@+id/action_homeFragment_to_popularFragment"
             app:destination="@id/popularFragment"
@@ -40,7 +44,11 @@
         tools:layout="@layout/fragment_menu" >
         <action
             android:id="@+id/action_menuFragment_to_notification"
-            app:destination="@id/notification" />
+            app:destination="@id/notification"
+            app:enterAnim="@anim/up_in"
+            app:exitAnim="@anim/down_in"
+            app:popEnterAnim="@anim/up_in"
+            app:popExitAnim="@anim/down_in" />
     <argument
         android:name="category"
         app:argType="string" />
@@ -52,7 +60,11 @@
         tools:layout="@layout/fragment_popular" >
         <action
             android:id="@+id/action_popularFragment_to_notification"
-            app:destination="@id/notification" />
+            app:destination="@id/notification"
+            app:enterAnim="@anim/up_in"
+            app:exitAnim="@anim/down_in"
+            app:popEnterAnim="@anim/up_in"
+            app:popExitAnim="@anim/down_in" />
     </fragment>
 
 </navigation>

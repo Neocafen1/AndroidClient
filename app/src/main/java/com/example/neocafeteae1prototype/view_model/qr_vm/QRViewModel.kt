@@ -13,19 +13,19 @@ import javax.inject.Inject
 @HiltViewModel
 class QRViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
-    val table = MutableLiveData<Resource<AllModels.Table>>()
-    val lockedTable = MutableLiveData<AllModels.Table>()
-    val isUserHaveTable = MutableLiveData<Boolean>()
+    val table = MutableLiveData<Resource<AllModels.Table?>>()
+    val lockedTable = MutableLiveData<Boolean?>()
+    val isUserHaveTable = MutableLiveData<AllModels.QrTable>()
 
-    fun checkIsUserHaveTable(){
+    fun checkIsUserHaveTable() {
         viewModelScope.launch {
             repository.isUserHaveTable().let {
-                if(it is Resource.Success) this@QRViewModel.isUserHaveTable.postValue(it.value)
+                if (it is Resource.Success) this@QRViewModel.isUserHaveTable.postValue(it.value)
             }
         }
     }
 
-    fun checkTable(table:String) {
+    fun checkTable(table: String) {
         viewModelScope.launch {
             repository.checkTable(table).let {
                 this@QRViewModel.table.postValue(it)
@@ -33,12 +33,10 @@ class QRViewModel @Inject constructor(private val repository: MainRepository) : 
         }
     }
 
-    fun lockTable(table: String){
+    fun lockTable(table: String) {
         viewModelScope.launch {
             repository.lockTable(table).let {
-                when(it){
-                    is Resource.Success -> this@QRViewModel.lockedTable.postValue(it.value)
-                }
+                if (it is Resource.Success) this@QRViewModel.lockedTable.postValue(it.value)
             }
         }
     }

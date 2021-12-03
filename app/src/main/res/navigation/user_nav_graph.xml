@@ -19,7 +19,11 @@
             app:popExitAnim="@anim/left_in" />
         <action
             android:id="@+id/action_userFragment_to_notification5"
-            app:destination="@id/notification5" />
+            app:destination="@id/notification5"
+            app:enterAnim="@anim/up_in"
+            app:exitAnim="@anim/down_in"
+            app:popEnterAnim="@anim/up_in"
+            app:popExitAnim="@anim/down_in" />
     </fragment>
     <fragment
         android:id="@+id/userShoppingHistory"
@@ -35,7 +39,11 @@
             app:popExitAnim="@anim/down_in" />
         <action
             android:id="@+id/action_userShoppingHistory_to_notification5"
-            app:destination="@id/notification5" />
+            app:destination="@id/notification5"
+            app:enterAnim="@anim/up_in"
+            app:exitAnim="@anim/down_in"
+            app:popEnterAnim="@anim/up_in"
+            app:popExitAnim="@anim/down_in" />
     </fragment>
     <fragment
         android:id="@+id/receiptDetailFragment"
@@ -47,7 +55,11 @@
             app:argType="com.example.neocafeteae1prototype.data.models.AllModels$Receipt" />
         <action
             android:id="@+id/action_receiptDetailFragment_to_notification5"
-            app:destination="@id/notification5" />
+            app:destination="@id/notification5"
+            app:enterAnim="@anim/up_in"
+            app:exitAnim="@anim/down_in"
+            app:popEnterAnim="@anim/up_in"
+            app:popExitAnim="@anim/down_in" />
     </fragment>
     <fragment
         android:id="@+id/notification5"

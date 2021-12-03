@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.neocafeteae1prototype.databinding.PopularItemBinding
 import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.view.tools.delegates.RecyclerItemClickListener
+import com.example.neocafeteae1prototype.view.tools.delegates.SecondItemClickListener
 import com.example.neocafeteae1prototype.view.tools.loadWithGlide
 
 
-class MenuRecyclerAdapter(private val click:RecyclerItemClickListener) : RecyclerView.Adapter<MenuRecyclerAdapter.ViewHolder>() {
+class MenuRecyclerAdapter(private val click:SecondItemClickListener) : RecyclerView.Adapter<MenuRecyclerAdapter.ViewHolder>() {
 
     private var list = mutableListOf<AllModels.Popular>()
     private var filter = ""
@@ -34,7 +35,7 @@ class MenuRecyclerAdapter(private val click:RecyclerItemClickListener) : Recycle
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
         holder.itemView.setOnClickListener {
-            click.itemClicked(list[position])
+            click.holderClicked(list[position], position)
         }
         with(list[position]) {
             if (category_name == filter || filter == "Все") {

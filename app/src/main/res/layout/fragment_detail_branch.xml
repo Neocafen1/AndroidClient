@@ -168,7 +168,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginEnd="@dimen/margin_20_dp"
                     android:text="@string/instagram"
                     android:textColor="@color/white" />
 
@@ -176,7 +176,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="@dimen/margin_10_dp"
+                    android:layout_marginStart="25dp"
                     android:src="@drawable/ic_instagram" />
 
             </androidx.cardview.widget.CardView>
@@ -198,7 +198,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginEnd="25dp"
                     android:text="@string/facebook"
                     android:textColor="@color/white" />
 
@@ -206,7 +206,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="@dimen/margin_10_dp"
+                    android:layout_marginStart="25dp"
                     android:src="@drawable/ic_facebook" />
 
             </androidx.cardview.widget.CardView>

@@ -3,11 +3,15 @@ package com.example.neocafeteae1prototype.view.tools.alert_dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.databinding.AlertDialogLayoutBinding
+import com.example.neocafeteae1prototype.view.tools.firebaseLogging
+import com.example.neocafeteae1prototype.view.tools.mainLogging
+import com.example.neocafeteae1prototype.view.tools.setSafeOnClickListener
 
 class CustomAlertDialog(var function: () -> Unit,  var title: String?, var message: String?) : BaseAlertDialog<AlertDialogLayoutBinding>() {
 
@@ -32,7 +36,7 @@ class CustomAlertDialog(var function: () -> Unit,  var title: String?, var messa
             binding.message.text = message
         }
 
-        binding.positiveButton.setOnClickListener {
+        binding.positiveButton.setSafeOnClickListener{
             function()
             dismiss()
         }

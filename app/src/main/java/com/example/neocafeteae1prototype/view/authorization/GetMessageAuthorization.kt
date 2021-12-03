@@ -4,6 +4,7 @@ import `in`.aabhasjindal.otptextview.OTPListener
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,17 +16,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.neocafeteae1prototype.R
 import com.example.neocafeteae1prototype.data.local.LocalDatabase
+import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.databinding.FragmentGetMessageAuthorizationBinding
+import com.example.neocafeteae1prototype.view.registration.RegistrationBirthdayFragmentDirections
+import com.example.neocafeteae1prototype.view.tools.navigate
 import com.example.neocafeteae1prototype.view.tools.showSnackBar
 import com.example.neocafeteae1prototype.view.tools.showToast
 import com.example.neocafeteae1prototype.view.tools.visible
 import com.example.neocafeteae1prototype.view_model.regisration_vm.RegistrationViewModel
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -47,6 +53,7 @@ class GetMessageAuthorization : Fragment() {
     ): View? {
         _binding = FragmentGetMessageAuthorizationBinding.inflate(inflater, container, false)
         phoneNumber = args.phoneNumber
+        startTimer()
 
         _binding?.registrationButton?.setOnClickListener {
             sendMessage()
@@ -159,12 +166,29 @@ class GetMessageAuthorization : Fragment() {
     private fun getData(){
         _binding?.progress?.visible()
         val uid = FirebaseAuth.getInstance().uid
-        viewModel.JWTtoken(phoneNumber, uid!!)
+        viewModel.get_jwt_token(phoneNumber, uid!!)
         viewModel.tokens.observe(viewLifecycleOwner){
             localDatabase.saveAccessToken(it.access)
             localDatabase.saveRefreshToken(it.refresh)
+            saveFCM()
         }
-        findNavController().navigate(GetMessageAuthorizationDirections.actionGetMessageAuthorizationToBottomViewFragment3())
+    }
+
+    private fun saveFCM() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("TAG", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+            task.addOnSuccessListener {
+                viewModel.saveFCM(AllModels.FCM_token(it, "client"))
+                viewModel.isFcmSaved.observe(viewLifecycleOwner){
+                    if (it){
+                        navigate(GetMessageAuthorizationDirections.actionGetMessageAuthorizationToBottomViewFragment3())
+                    }
+                }
+            }
+        })
     }
 
     override fun onDestroyView() {

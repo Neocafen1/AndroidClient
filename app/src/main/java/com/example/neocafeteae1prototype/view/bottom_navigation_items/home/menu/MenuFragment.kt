@@ -13,21 +13,21 @@ import com.example.neocafeteae1prototype.databinding.FragmentMenuBinding
 import com.example.neocafeteae1prototype.view.adapters.MenuRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.bottom_sheet.ProductModalSheet
-import com.example.neocafeteae1prototype.view.tools.delegates.RecyclerItemClickListener
+import com.example.neocafeteae1prototype.view.tools.delegates.SecondItemClickListener
+import com.example.neocafeteae1prototype.view.tools.navigate
 import com.example.neocafeteae1prototype.view_model.menu_shopping_vm.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MenuFragment : BaseFragment<FragmentMenuBinding>(), RecyclerItemClickListener {
+class MenuFragment : BaseFragment<FragmentMenuBinding>(), SecondItemClickListener {
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val recyclerAdapter by lazy { MenuRecyclerAdapter(this) }
     private val args: MenuFragmentArgs by navArgs()
-    private val mapOfCategory = mutableMapOf<String, Int>(
+    private val mapOfCategory = mutableMapOf(
         "Выпечка" to R.id.bakery, "Кофе" to R.id.coffee, "Чай" to R.id.tea,
         "Напитки" to R.id.drinks, "Десерты" to R.id.desserts
     )
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,11 +43,10 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(), RecyclerItemClickListe
             recyclerSetList(viewId)
         }
 
-        binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
+        binding.chipGroup.setOnCheckedChangeListener { _, checkedId ->
             recyclerSetList(checkedId)
         }
     }
-
 
     private fun recyclerSetList(checkedId: Int) {
         val checkedText = when (checkedId) {
@@ -69,9 +68,7 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(), RecyclerItemClickListe
         with(binding.include) {
             textView.text = resources.getText(R.string.Menu)
             backButton.setOnClickListener { navController.navigateUp() }
-            notification.setOnClickListener {
-                navController.navigate(MenuFragmentDirections.actionMenuFragmentToNotification())
-            }
+            notification.setOnClickListener { navigate(MenuFragmentDirections.actionMenuFragmentToNotification()) }
         }
     }
 
@@ -79,8 +76,11 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(), RecyclerItemClickListe
         return FragmentMenuBinding.inflate(inflater)
     }
 
-    override fun itemClicked(item: AllModels?) {
-//        ProductModalSheet(item as AllModels.Popular) { recyclerDataChanged(position) }.show(childFragmentManager, "TAG")
+    override fun holderClicked(model: AllModels?, position: Int) {
+        ProductModalSheet(model as AllModels.Popular) { recyclerDataChanged(position) }.show(childFragmentManager, "TAG")
     }
 
+    private fun recyclerDataChanged(position: Int){
+        recyclerAdapter.notifyItemChanged(position)
+    }
 }

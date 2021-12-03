@@ -12,13 +12,25 @@
         tools:layout="@layout/fragment_shopping" >
         <action
             android:id="@+id/action_shoppingFragment_to_notification3"
-            app:destination="@id/notification3" />
+            app:destination="@id/notification3"
+            app:enterAnim="@anim/up_in"
+            app:exitAnim="@anim/down_in"
+            app:popEnterAnim="@anim/up_in"
+            app:popExitAnim="@anim/down_in" />
         <action
             android:id="@+id/action_shoppingFragment_to_emptyIllustrativeFragment"
-            app:destination="@id/emptyIllustrativeFragment" />
+            app:destination="@id/emptyIllustrativeFragment"
+            app:enterAnim="@anim/right_in"
+            app:exitAnim="@anim/left_in"
+            app:popEnterAnim="@anim/right_in"
+            app:popExitAnim="@anim/left_in" />
         <action
             android:id="@+id/action_shoppingFragment_to_shoppingOrderFragment2"
-            app:destination="@id/shoppingOrderFragment2" />
+            app:destination="@id/shoppingOrderFragment2"
+            app:enterAnim="@anim/right_in"
+            app:exitAnim="@anim/left_in"
+            app:popEnterAnim="@anim/right_in"
+            app:popExitAnim="@anim/left_in" />
     </fragment>
     <fragment
         android:id="@+id/notification3"
@@ -32,7 +44,11 @@
         tools:layout="@layout/fragment_empty_illustrative" >
         <action
             android:id="@+id/action_emptyIllustrativeFragment_to_notification3"
-            app:destination="@id/notification3" />
+            app:destination="@id/notification3"
+            app:enterAnim="@anim/up_in"
+            app:exitAnim="@anim/down_in"
+            app:popEnterAnim="@anim/up_in"
+            app:popExitAnim="@anim/down_in" />
     </fragment>
     <fragment
         android:id="@+id/shoppingOrderFragment2"
@@ -41,7 +57,11 @@
         tools:layout="@layout/fragment_shopping_order" >
         <action
             android:id="@+id/action_shoppingOrderFragment2_to_notification3"
-            app:destination="@id/notification3" />
+            app:destination="@id/notification3"
+            app:enterAnim="@anim/up_in"
+            app:exitAnim="@anim/down_in"
+            app:popEnterAnim="@anim/up_in"
+            app:popExitAnim="@anim/down_in" />
         <argument
             android:name="shoppingList"
             app:argType="com.example.neocafeteae1prototype.data.models.AllModels$Test" />

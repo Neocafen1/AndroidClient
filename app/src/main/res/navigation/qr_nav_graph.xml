@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_qrcode" >
         <action
             android:id="@+id/action_QRcodeFragment_to_notification4"
-            app:destination="@id/notification4" />
+            app:destination="@id/notification4"
+            app:enterAnim="@anim/up_in"
+            app:exitAnim="@anim/down_in"
+            app:popEnterAnim="@anim/up_in"
+            app:popExitAnim="@anim/down_in" />
     </fragment>
     <fragment
         android:id="@+id/notification4"

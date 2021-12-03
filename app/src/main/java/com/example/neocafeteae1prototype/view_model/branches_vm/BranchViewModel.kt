@@ -7,6 +7,7 @@ import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.data.models.Resource
 import com.example.neocafeteae1prototype.repository.MainRepository
 import com.example.neocafeteae1prototype.view.root.BaseViewModel
+import com.example.neocafeteae1prototype.view.tools.firebaseLogging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

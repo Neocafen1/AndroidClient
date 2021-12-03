@@ -20,6 +20,7 @@
         android:background="@drawable/layout_top_rounded">
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/text_view"
             style="@style/TextView_18sp_Thin"
             android:layout_width="250dp"
@@ -33,6 +34,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.budiyev.android.codescanner.CodeScannerView
+            android:visibility="gone"
             android:id="@+id/scanner_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -54,6 +56,35 @@
             app:layout_constraintTop_toTopOf="@id/text_view"
             app:maskColor="#77000000" />
 
+        
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="300dp"
+            style="@style/TextView_18sp_Bold"
+            android:layout_gravity="center"
+            android:layout_marginTop="140dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            tools:text="Стол овдлпрырвполырплыдп аьфыа"/>
+
+        <TextView
+            android:id="@+id/message"
+            style="@style/TextView_18sp_Thin"
+            android:text="@string/booked"
+            android:layout_gravity="center"
+            android:layout_width="300dp"
+            android:layout_marginTop="@dimen/margin_10_dp"
+            android:textAlignment="center"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/go_to_menu"
+            android:layout_width="300dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_18_dp"
+            android:text="@string/go_to_menu"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_enable_custom_style"/>
 
     </LinearLayout>
 

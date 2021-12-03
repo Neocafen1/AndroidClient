@@ -9,6 +9,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/Constraint_Layout_Default">
 
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/standart_registration_progress_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/textView"
             android:layout_marginTop="@dimen/margin_156_dp"

@@ -17,6 +17,7 @@ import com.example.neocafeteae1prototype.databinding.FragmentMapBinding
 import com.example.neocafeteae1prototype.view.adapters.MainRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.delegates.RecyclerItemClickListener
+import com.example.neocafeteae1prototype.view.tools.navigate
 import com.example.neocafeteae1prototype.view.tools.notVisible
 import com.example.neocafeteae1prototype.view.tools.visible
 import com.example.neocafeteae1prototype.view_model.branches_vm.BranchViewModel
@@ -56,7 +57,7 @@ class BranchFragment : BaseFragment<FragmentMapBinding>(),
 
     override fun itemClicked(item: AllModels?) {
         item as AllModels.Filial
-        navController.navigate(BranchFragmentDirections.actionBranchFragmentToBranchesDetailFragment(item, socialMedia))
+        navigate(BranchFragmentDirections.actionBranchFragmentToBranchesDetailFragment(item, socialMedia))
     }
 
     override fun setUpToolbar() {

@@ -16,6 +16,7 @@ import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.bottom_sheet.ProductModalSheet
 import com.example.neocafeteae1prototype.view.tools.delegates.RecyclerItemClickListener
 import com.example.neocafeteae1prototype.view.tools.delegates.SecondItemClickListener
+import com.example.neocafeteae1prototype.view.tools.navigate
 import com.example.neocafeteae1prototype.view.tools.notVisible
 import com.example.neocafeteae1prototype.view_model.menu_shopping_vm.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +25,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), RecyclerItemClickListener,
     SecondItemClickListener {
 
-    private var recyclerPosition = 0
     private val shareViewModel: SharedViewModel by activityViewModels()
     private val popularAdapter by lazy { ProductRecyclerAdapter(this) } // Для продуктоа категории популярное
     private val mainAdapter by lazy { MainRecyclerAdapter(this) } // Для категории меню
@@ -54,15 +54,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), RecyclerItemClickListe
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
         shareViewModel.productList.observe(viewLifecycleOwner) {
-            shareViewModel.getPopularProduct(it)
-            popularAdapter.setList(shareViewModel.popularList)
+            popularAdapter.setList(shareViewModel.getPopularProduct(it))
             binding.progress.notVisible()
         }
     }
 
     override fun itemClicked(item: AllModels?) {
         val category = item as AllModels.Menu
-        navController.navigate(HomeFragmentDirections.actionHomeFragmentToMenuFragment(category.name))
+        navigate(HomeFragmentDirections.actionHomeFragmentToMenuFragment(category.name))
     }
 
     override fun holderClicked(model: AllModels?, position:Int) {
@@ -74,15 +73,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), RecyclerItemClickListe
         popularAdapter.notifyItemChanged(position)
     }
 
-
-
     private fun setUpButtonsListener() {
-        binding.all.setOnClickListener { navController.navigate(HomeFragmentDirections.actionHomeFragmentToPopularFragment()) }
+        binding.all.setOnClickListener { navigate(HomeFragmentDirections.actionHomeFragmentToPopularFragment()) }
     }
 
     override fun setUpToolbar() {
         with(binding) {
-            notificationIcon.setOnClickListener { navController.navigate(HomeFragmentDirections.actionHomeFragmentToNotification()) }
+            notificationIcon.setOnClickListener { navigate(HomeFragmentDirections.actionHomeFragmentToNotification()) }
         }
     }
 

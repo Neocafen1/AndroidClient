@@ -16,6 +16,10 @@ import com.example.neocafeteae1prototype.data.Consts
 import com.example.neocafeteae1prototype.databinding.FragmentNotificationBinding
 import com.example.neocafeteae1prototype.view.adapters.MainRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
+import com.example.neocafeteae1prototype.view.tools.firebaseLogging
+import com.example.neocafeteae1prototype.view.tools.notVisible
+import com.example.neocafeteae1prototype.view.tools.showToast
+import com.example.neocafeteae1prototype.view.tools.visible
 import com.example.neocafeteae1prototype.view_model.notification_vm.NotificationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
@@ -30,6 +34,16 @@ class Notification : BaseFragment<FragmentNotificationBinding>() {
         super.onViewCreated(view, savedInstanceState)
         setUpRecycler()
         setUpSwipeCallback()
+        viewModel.getNotifications()
+        binding.clearNotification.setOnClickListener {
+            viewModel.clearAllNotifications()
+        }
+        viewModel.isNotificationsDeleted.observe(viewLifecycleOwner){
+            if (it){
+                viewModel.getNotifications()
+                "Данные удалены".showToast(requireContext(), Toast.LENGTH_LONG)
+            }
+        }
     }
 
     private fun setUpSwipeCallback() {
@@ -53,9 +67,11 @@ class Notification : BaseFragment<FragmentNotificationBinding>() {
 
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        viewModel.list.removeAt(position)
-                        recyclerAdapter.notifyItemRemoved(position)
-                        viewModel.deleteNotificationsById(position)
+                        viewModel.notificationList.value?.let{
+                            viewModel.deleteNotificationsById(it[position].id)
+                            it.removeAt(position)
+                            recyclerAdapter.notifyItemRemoved(position)
+                        }
                     }
                 }
             }
@@ -70,7 +86,15 @@ class Notification : BaseFragment<FragmentNotificationBinding>() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = recyclerAdapter
         }
-        recyclerAdapter.setList(viewModel.list)
+        viewModel.notificationList.observe(viewLifecycleOwner){
+            if (it.isEmpty()) {
+                binding.imageView2.visible()
+                binding.textView5.visible()
+                binding.clearNotification.notVisible()
+            }else{
+                recyclerAdapter.setList(it)
+            }
+        }
     }
 
     override fun setUpToolbar() {

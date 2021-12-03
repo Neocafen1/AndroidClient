@@ -62,7 +62,8 @@ class ProductModalSheet(private val model: AllModels.Popular,private val functio
 
     @SuppressLint("SetTextI18n")
     private fun setUpUI() {
-        binding.close.setOnClickListener { dismiss() }
+        printTotalPrice()
+        binding.close.setSafeOnClickListener { dismiss() }
 
         with(model) {
 
@@ -75,6 +76,7 @@ class ProductModalSheet(private val model: AllModels.Popular,private val functio
             binding.add.setOnClickListener {
                 if (county == 0){
                     county++
+                    printTotalPrice()
                     binding.quantity.text = county.toString()
                     function()
                 }
@@ -83,6 +85,7 @@ class ProductModalSheet(private val model: AllModels.Popular,private val functio
 
             binding.addButton.setOnClickListener {
                 this.county += 1
+                printTotalPrice()
                 binding.quantity.text = this.county.toString()
                 function()
             }
@@ -92,13 +95,17 @@ class ProductModalSheet(private val model: AllModels.Popular,private val functio
                 if (county == 0){
                     changeVisibility(county)
                 }
+                printTotalPrice()
                 function()
             }
-            binding.addElement.setOnClickListener {
+            binding.addElement.setSafeOnClickListener {
                 dismiss()
             }
-
         }
+    }
+
+    private fun printTotalPrice(){
+        binding.totalPrice.text = "${model.county * model.price}c"
     }
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): FragmentProductBinding {

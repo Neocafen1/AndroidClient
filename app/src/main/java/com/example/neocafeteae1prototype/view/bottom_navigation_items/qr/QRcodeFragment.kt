@@ -23,9 +23,11 @@ import com.example.neocafeteae1prototype.databinding.FragmentQrcodeBinding
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.CustomAlertDialog
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.DoneAlertDialog
-import com.example.neocafeteae1prototype.view.tools.showSnackBarWithButton
+import com.example.neocafeteae1prototype.view.tools.navigate
+import com.example.neocafeteae1prototype.view.tools.showRedSnackbar
+import com.example.neocafeteae1prototype.view.tools.visible
 import com.example.neocafeteae1prototype.view_model.qr_vm.QRViewModel
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -39,14 +41,50 @@ class QRcodeFragment : BaseFragment<FragmentQrcodeBinding>() {
 
     private val viewModel by viewModels<QRViewModel>()
     private lateinit var scanner: CodeScanner
-    private lateinit var table:AllModels.Table
+    private val bottomNavigation by lazy { activity?.findViewById(R.id.bottomNavigationView) as BottomNavigationView }
     private var tableQr = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         scanner = CodeScanner(requireContext(), binding.scannerView)
+        checkCameraPermissions()
+        checkIsUserHaveTable()
+        binding.goToMenu.setOnClickListener {
+            bottomNavigation.selectedItemId = R.id.home_nav_graph
+        }
 
-        Dexter.withContext(context) // Dexter библиотека которая помогает работать с permisssions
+        viewModel.lockedTable.observe(viewLifecycleOwner) {
+            it?.let {
+                if (it){
+                    checkIsUserHaveTable()
+                    DoneAlertDialog("Стол забронирован") { }.show(childFragmentManager, "TAG")
+                    viewModel.lockedTable.postValue(null)
+                }
+            }
+        }
+
+        viewModel.table.observe(viewLifecycleOwner) {
+            it?.let {
+                when (it) {
+                    is Resource.Failure -> {
+                        "Введите верные данные".showRedSnackbar(binding.scannerView)
+                        viewModel.table.postValue(null)
+                    }
+                    is Resource.Success -> {
+                        if (it.value?.user == null) {
+                            CustomAlertDialog({ lockTable(it.value) }, "Стол свободен", "Забронировать?").show(childFragmentManager, "TAG")
+                        } else {
+                            "Стол занят".showRedSnackbar(binding.scannerView)
+                        }
+                        viewModel.table.postValue(null)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checkCameraPermissions() {
+        Dexter.withContext(context) // Dexter библиотека которая помогает работать с permissions
             .withPermission(Manifest.permission.CAMERA)
             .withListener(object : PermissionListener {
                 override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
@@ -79,21 +117,32 @@ class QRcodeFragment : BaseFragment<FragmentQrcodeBinding>() {
     // Метод проверяет есть ли у юзера забронированный стол если false то у него столов нет
     private fun checkIsUserHaveTable() {
         viewModel.checkIsUserHaveTable()
-        viewModel.isUserHaveTable.observe(viewLifecycleOwner){
-            if (!it){ // если у него не стола
-                checkTableIsFree()
-            }else{
-                "За вами был забранирован стол".showSnackBarWithButton(binding.scannerView)
+        viewModel.isUserHaveTable.observe(viewLifecycleOwner) {
+            if (it.have_table == false) { // если у него не стола
+                binding.apply {
+                    scannerView.visible()
+                    textView.visible()
+                }
+            } else if(it.have_table){
+                binding.apply {
+                    title.text = "Стол №${it.table} в филиале ${it.filial}"
+                    title.visible()
+                    message.visible()
+                    goToMenu.visible()
+                }
             }
         }
     }
 
     private fun requestPermission() {
-        ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.CAMERA), Consts.PERMISSION_REQUEST_CODE)
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(Manifest.permission.CAMERA),
+            Consts.PERMISSION_REQUEST_CODE
+        )
     }
 
     private fun QRcodeChecker() {
-
         scanner.apply {
             camera = CodeScanner.CAMERA_BACK
             formats = CodeScanner.ALL_FORMATS
@@ -114,47 +163,17 @@ class QRcodeFragment : BaseFragment<FragmentQrcodeBinding>() {
     @SuppressLint("CommitPrefEdits")
     private fun checkTableIsFree() {
         viewModel.checkTable(tableQr) // Проверка не забронирован ли за этот стол
-        viewModel.table.observe(viewLifecycleOwner){
-            when(it){
-                is Resource.Failure -> {
-                    Snackbar.make(binding.scannerView, "Введите верные данные", Snackbar.LENGTH_INDEFINITE).apply {
-                        setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.red))
-                        setActionTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                        setAction("Закрыть"){
-                            dismiss()
-                        }
-                    }.show()
-                }
-                is Resource.Success -> {
-                    if (it.value.user == null){
-                        table = it.value
-                        CustomAlertDialog(this::lockTable, "Стол свободен", "Забранировать?").show(childFragmentManager, "TAG")
-                    }else{
-                        Snackbar.make(binding.scannerView, "Стол занят", Snackbar.LENGTH_INDEFINITE).apply {
-                            setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.red))
-                            setActionTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                            setAction("Закрыть"){
-                                dismiss()
-                            }
-                        }.show()
-                    }
-                }
-            }
-        }
     }
 
-    private fun lockTable(){
-        viewModel.lockTable(table.qrCode)
-        viewModel.lockedTable.observe(viewLifecycleOwner){
-            DoneAlertDialog("Стол забронирован").show(childFragmentManager, "TAG")
-            
-        }
+    private fun lockTable(value: AllModels.Table?) {
+        viewModel.lockTable(value?.qrCode ?: "filial")
     }
 
     override fun setUpToolbar() {
-        binding.include.notification.setOnClickListener { navController.navigate(
-            QRcodeFragmentDirections.actionQRcodeFragmentToNotification4()
-        ) }
+        with(binding.include) {
+            notification.setOnClickListener { navigate(QRcodeFragmentDirections.actionQRcodeFragmentToNotification4()) }
+            textView.text = "QR код"
+        }
     }
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup?): FragmentQrcodeBinding {

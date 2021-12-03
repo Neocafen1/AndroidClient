@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.neocafeteae1prototype.R
@@ -16,7 +15,7 @@ import com.example.neocafeteae1prototype.view.tools.delegates.RecyclerItemClickL
 import com.example.neocafeteae1prototype.databinding.FragmentUserShoppingHistoryBinding
 import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.DoneAlertDialog
-import com.example.neocafeteae1prototype.view.tools.mainLogging
+import com.example.neocafeteae1prototype.view.tools.navigate
 import com.example.neocafeteae1prototype.view.tools.notVisible
 import com.example.neocafeteae1prototype.view.tools.visible
 import com.example.neocafeteae1prototype.view_model.user_shopping_history_vm.UserShoppingViewModel
@@ -36,19 +35,28 @@ class UserShoppingHistory : BaseFragment<FragmentUserShoppingHistoryBinding>(), 
         viewModel.getOrderHistory()
         setUpButtonsListener()
         binding.goToMenuButton.setOnClickListener { bottomNavigationView.selectedItemId = R.id.home_nav_graph }
-    }
-
-    private fun setUpRecycler() {
-        binding.recyclerView.apply {
-            adapter = recyclerAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
         viewModel.orderList.observe(viewLifecycleOwner){result->
             if (result.isEmpty()){
                 updateVisibility()
             }else{
                 recyclerAdapter.setList(result)
             }
+        }
+        viewModel.isHistoryDeleted.observe(viewLifecycleOwner){
+            it?.let {
+                if (it){
+                    viewModel.getOrderHistory()
+                    DoneAlertDialog("Данные удалены!") {  }.show(childFragmentManager, "TAG")
+                    viewModel.isHistoryDeleted.postValue(null)
+                }
+            }
+        }
+    }
+
+    private fun setUpRecycler() {
+        binding.recyclerView.apply {
+            adapter = recyclerAdapter
+            layoutManager = LinearLayoutManager(requireContext())
         }
     }
 
@@ -59,17 +67,11 @@ class UserShoppingHistory : BaseFragment<FragmentUserShoppingHistoryBinding>(), 
     }
 
     override fun itemClicked(item: AllModels?) {
-        findNavController().navigate(UserShoppingHistoryDirections.actionUserShoppingHistoryToReceiptDetailFragment(item as AllModels.Receipt))
+        navigate(UserShoppingHistoryDirections.actionUserShoppingHistoryToReceiptDetailFragment(item as AllModels.Receipt))
     }
 
     private fun clearAllReceipt() {
         viewModel.deleteUserHistory()
-        viewModel.isHistoryDeleted.observe(viewLifecycleOwner){
-            if (it){
-                viewModel.getOrderHistory()
-                DoneAlertDialog("Данные удалены!").show(childFragmentManager, "TAG")
-            }
-        }
     }
 
     private fun updateVisibility(){
@@ -86,7 +88,7 @@ class UserShoppingHistory : BaseFragment<FragmentUserShoppingHistoryBinding>(), 
         with(binding.include){
             textView.text = resources.getText(R.string.history)
             backButton.setOnClickListener { navController.navigateUp() }
-            notification.setOnClickListener { navController.navigate(UserShoppingHistoryDirections.actionUserShoppingHistoryToNotification5()) }
+            notification.setOnClickListener { navigate(UserShoppingHistoryDirections.actionUserShoppingHistoryToNotification5()) }
         }
     }
 

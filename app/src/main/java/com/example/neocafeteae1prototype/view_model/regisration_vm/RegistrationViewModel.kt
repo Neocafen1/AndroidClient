@@ -21,14 +21,15 @@ class RegistrationViewModel @Inject constructor(private val repository: MainRepo
 
     var userCreated = MutableLiveData<Boolean>()
     var tokens = MutableLiveData<AllModels.JWT_token>()
-    var isNumberLocateInDB = MutableLiveData<Boolean>()
+    var isNumberLocateInDB = MutableLiveData<Boolean?>()
+    val isFcmSaved = MutableLiveData<Boolean>()
     private lateinit var request:Response<String>
 
 
     fun sendUserData(number: Int, uid: String, name: String, birthDay: String?) {
         CoroutineScope(Dispatchers.IO).launch {
             if (birthDay!=null){
-                request = repository.postUserData(number, uid, name, birthDay)
+                request = repository.postUserData(AllModels.UserData(number, uid, name, birthDay))
             }else{
                 request = repository.postUserDataWithoutBirthday(number,uid,name)
             }
@@ -43,16 +44,23 @@ class RegistrationViewModel @Inject constructor(private val repository: MainRepo
 
     fun checkNumber(number: Int) {
         viewModelScope.launch {
-            val request = repository.checkNumber(number)
-            if (request.isSuccessful) {
-                if (request.body()!!){
-                    isNumberLocateInDB.postValue(true)
+            repository.checkNumber(number).let{
+                if(it.isSuccessful){
+                    isNumberLocateInDB.postValue(it.body())
                 }
             }
         }
     }
 
-    fun JWTtoken(number: Int, uid: String) {
+    fun saveFCM(model:AllModels.FCM_token){
+        viewModelScope.launch {
+            repository.saveFCMtoken(model).let {
+                if (it is Resource.Success) this@RegistrationViewModel.isFcmSaved.postValue(it.value)
+            }
+        }
+    }
+
+    fun get_jwt_token(number: Int, uid: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val request = repository.getJWTtoken(number, uid)
             if (request.isSuccessful) {

@@ -15,13 +15,8 @@ class MainRepository @Inject constructor(
     private val shoppingAPI: ShoppingAPI
 ) : SafeApiCall {
 
-    suspend fun postUserData(
-        number: Int,
-        password: String,
-        name: String,
-        birthDate: String
-    ): Response<String> {
-        return registration.sendUserData(number, password, name, birthDate)
+    suspend fun postUserData(userData: AllModels.UserData): Response<String> {
+        return registration.sendUserData(userData)
     }
 
     suspend fun postUserDataWithoutBirthday(
@@ -60,7 +55,7 @@ class MainRepository @Inject constructor(
         return safeApiCall { qrApi.checkTable(table) }
     }
 
-    suspend fun lockTable(table: String): Resource<AllModels.Table?> {
+    suspend fun lockTable(table: String): Resource<Boolean?> {
         return safeApiCall { qrApi.lockTable(table) }
     }
 
@@ -80,7 +75,7 @@ class MainRepository @Inject constructor(
         return safeApiCall { shoppingAPI.createOrderTakeOut(list) }
     }
 
-    suspend fun isUserHaveTable():Resource<Boolean>{
+    suspend fun isUserHaveTable():Resource<AllModels.QrTable>{
         return safeApiCall { qrApi.isUserHaveTable() }
     }
 
@@ -92,4 +87,15 @@ class MainRepository @Inject constructor(
         return safeApiCall { userAPI.deleteUserNotifications("C", id) }
     }
 
+    suspend fun saveFCMtoken(model:AllModels.FCM_token):Resource<Boolean>{
+        return safeApiCall { registration.postFCMToken(model) }
+    }
+
+    suspend fun getNotification():Resource<MutableList<AllModels.Notification>>{
+        return safeApiCall { userAPI.getNotifications() }
+    }
+
+    suspend fun deleteAllNotifications():Resource<Boolean>{
+        return safeApiCall { userAPI.deleteAllNotifications() }
+    }
 }

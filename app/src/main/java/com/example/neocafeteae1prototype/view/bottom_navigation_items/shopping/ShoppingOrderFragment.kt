@@ -14,9 +14,10 @@ import com.example.neocafeteae1prototype.databinding.FragmentShoppingOrderBindin
 import com.example.neocafeteae1prototype.view.adapters.MainRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.DoneAlertDialog
+import com.example.neocafeteae1prototype.view.tools.navigate
 import com.example.neocafeteae1prototype.view.tools.notVisible
+import com.example.neocafeteae1prototype.view.tools.setSafeOnClickListener
 import com.example.neocafeteae1prototype.view.tools.visible
-import com.example.neocafeteae1prototype.view_model.main_vm.MainViewModel
 import com.example.neocafeteae1prototype.view_model.menu_shopping_vm.SharedViewModel
 import com.example.neocafeteae1prototype.view_model.menu_shopping_vm.ShoppingOrderViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,17 +37,30 @@ class ShoppingOrderFragment : BaseFragment<FragmentShoppingOrderBinding>() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.isProductListSent.postValue(false)
         setUpRecycler()
         setDate()
         viewModel.getProductList(args.shoppingList.products)
         args.shoppingList.products.forEach {
             totalPrice += it.price * it.county
         }
-        with(binding){
+        with(binding) {
             sum.text = "$totalPrice c"
             bonus.text = args.bonus.toString()
             result.text = "${totalPrice.minus(args.bonus)} c"
-            takeOrder.setOnClickListener { sendProducts() }
+            takeOrder.setSafeOnClickListener { sendProducts() }
+            viewModel.isProductListSent.observe(viewLifecycleOwner) {
+                it?.let {
+                    if (it) {
+                        shaveViewModel.deleteAllQuantity()
+                        binding.progress.notVisible()
+                        DoneAlertDialog("Ваш заказ оформлен") { navController.navigateUp() }.show(
+                            childFragmentManager,
+                            "TAG"
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -60,16 +74,8 @@ class ShoppingOrderFragment : BaseFragment<FragmentShoppingOrderBinding>() {
     }
 
     private fun sendProducts() {
-        viewModel.sendProductList(50, args.inCafe)
+        viewModel.sendProductList(args.bonus, args.inCafe)
         binding.progress.visible()
-        viewModel.isProductListSent.observe(viewLifecycleOwner){
-            if (it){
-                binding.progress.notVisible()
-                shaveViewModel.updateProductList()
-                navController.navigateUp()
-                DoneAlertDialog("Ваш заказ оформлен").show(childFragmentManager, "TAG")
-            }
-        }
     }
 
     private fun setUpRecycler() {
@@ -87,7 +93,7 @@ class ShoppingOrderFragment : BaseFragment<FragmentShoppingOrderBinding>() {
     override fun setUpToolbar() {
         with(binding.include){
             backButton.setOnClickListener{navController.navigateUp()}
-            notification.setOnClickListener { navController.navigate(ShoppingOrderFragmentDirections.actionShoppingOrderFragment2ToNotification3()) }
+            notification.setOnClickListener { navigate(ShoppingOrderFragmentDirections.actionShoppingOrderFragment2ToNotification3()) }
         }
     }
 }

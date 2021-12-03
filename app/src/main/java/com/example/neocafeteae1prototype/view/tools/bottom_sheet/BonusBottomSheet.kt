@@ -20,8 +20,10 @@ class BonusBottomSheet(val bonus: Int,val function: (Int) -> Unit) : BaseBottomS
         super.onViewCreated(view, savedInstanceState)
 
         editTextChangeListener()
+        binding.currentBonus.text = bonus.toString()
         binding.ready.setOnClickListener {
             function(binding.bonusEditText.text.toString().toInt())
+
         }
     }
 

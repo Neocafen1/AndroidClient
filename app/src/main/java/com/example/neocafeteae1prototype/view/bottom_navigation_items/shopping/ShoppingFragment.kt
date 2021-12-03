@@ -12,11 +12,9 @@ import com.example.neocafeteae1prototype.data.models.AllModels
 import com.example.neocafeteae1prototype.databinding.FragmentShoppingBinding
 import com.example.neocafeteae1prototype.view.adapters.ShoppingRecyclerAdapter
 import com.example.neocafeteae1prototype.view.root.BaseFragment
-import com.example.neocafeteae1prototype.view.tools.WrapContentLinearLayoutManager
+import com.example.neocafeteae1prototype.view.tools.*
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.ShoppingAlertDialog
 import com.example.neocafeteae1prototype.view.tools.bottom_sheet.BonusBottomSheet
-import com.example.neocafeteae1prototype.view.tools.cardActivate
-import com.example.neocafeteae1prototype.view.tools.cardNotActive
 import com.example.neocafeteae1prototype.view.tools.delegates.RecyclerItemClickListener
 import com.example.neocafeteae1prototype.view.tools.delegates.SecondItemClickListener
 import com.example.neocafeteae1prototype.view_model.menu_shopping_vm.SharedViewModel
@@ -38,21 +36,23 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
         setUpRecycler()
         buttonListener()
         sharedViewModel.getBonus()
-        binding.receiptHistory.setOnClickListener { bottomNavigation.selectedItemId = R.id.user_nav_graph }
-        binding.goToMenu.setOnClickListener { bottomNavigation.selectedItemId = R.id.home_nav_graph }
+        sharedViewModel.checkIsUserHaveTable()
+        with(binding){
+            receiptHistory.setOnClickListener { bottomNavigation.selectedItemId = R.id.user_nav_graph }
+            goToMenu.setOnClickListener { bottomNavigation.selectedItemId = R.id.home_nav_graph }
 
-        binding.delivery.setOnClickListener {  // Слушатель в заведении или нет меняет background кнопки
-            inCafe = false
-            buttonListener()
+            delivery.setSafeOnClickListener {  // Слушатель в заведении или нет меняет background кнопки
+                inCafe = false
+                buttonListener()
+            }
+            inShop.setSafeOnClickListener {
+                inCafe = true
+                buttonListener()
+            }
+            order.setOnClickListener { // Идет проверка есть ли у него бонусы если есть выходит окно где него спрашивают использовать их
+                checkIsUserHaveTable()
+            }
         }
-        binding.inShop.setOnClickListener {
-            inCafe = true
-            buttonListener()
-        }
-        binding.order.setOnClickListener { // Идет проверка есть ли у него бонусы если есть выходит окно где него спрашивают использовать их
-            checkIsUserHaveTable()
-        }
-
     }
 
     // Слушатель 2 cardView (В заведении или нет) меняет их background (Клиент таким  образом узнает какой из них активный)
@@ -68,9 +68,8 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
 
     // Метод проверяет есть ли у юзера забронированный стол если false то у него столов нет
     private fun checkIsUserHaveTable(){
-        sharedViewModel.checkIsUserHaveTable()
         sharedViewModel.isUserHaveTable.observe(viewLifecycleOwner){
-            if (it){
+            if (it.have_table){
                 checkIsUserHaveBonus()
             }else{
                 bottomNavigation.selectedItemId = R.id.qr_nav_graph
@@ -121,12 +120,12 @@ class ShoppingFragment : BaseFragment<FragmentShoppingBinding>(), RecyclerItemCl
     //Проверка бонусов и стола
     private fun useBonus(bonus: Int) { // Сработает когда в AlertDialog срабатывает использовать бонусы
             val shoppingList = AllModels.Test(sharedViewModel.shoppingList) // Это просто Serializable модел чтобы отправлять дынные через  safeArgs
-            navController.navigate(ShoppingFragmentDirections.actionShoppingFragmentToShoppingOrderFragment2(shoppingList, bonus, inCafe))
+            navigate(ShoppingFragmentDirections.actionShoppingFragmentToShoppingOrderFragment2(shoppingList, bonus, inCafe))
     }
 
     override fun setUpToolbar() {
         with(binding.include) {
-            notification.setOnClickListener { findNavController().navigate(ShoppingFragmentDirections.actionShoppingFragmentToNotification3()) }
+            notification.setOnClickListener { navigate(ShoppingFragmentDirections.actionShoppingFragmentToNotification3()) }
             textView.text = "Корзина"
         }
     }

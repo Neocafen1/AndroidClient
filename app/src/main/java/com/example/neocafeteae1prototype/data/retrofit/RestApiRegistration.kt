@@ -8,13 +8,9 @@ import retrofit2.http.*
 
 interface RestApiRegistration {
 
-    @FormUrlEncoded
     @POST("register/")
     suspend fun sendUserData(
-        @Field("number") number: Int,
-        @Field("password") password: String,
-        @Field("first_name") name: String,
-        @Field("birthDate") birthDate:String
+        @Body userModel:AllModels.UserData
     ): Response<String>
 
     @FormUrlEncoded
@@ -40,5 +36,9 @@ interface RestApiRegistration {
     @FormUrlEncoded
     @POST("refresh/")
     fun updateAccessTokenWithRefresh(@Field("refresh") token: String): Call<AllModels.RefreshResponse>
+
+    @POST("ncafe/fcm/create/")
+    suspend fun postFCMToken(@Body model:AllModels.FCM_token):Boolean
+
 
 }

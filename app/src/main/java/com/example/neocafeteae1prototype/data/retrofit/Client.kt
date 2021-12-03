@@ -17,7 +17,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object Client {
 
-
     @Singleton
     @Provides
     fun getValidateInterceptor(): Interceptor {

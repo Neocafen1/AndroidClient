@@ -85,10 +85,15 @@ sealed class AllModels : Serializable {
         val filial: String,
         val orderItems: List<Product>,
         val username: String
-    )
+    ):Serializable
+    data class FCM_token(val reg_id:String, val role:String)
 
-    data class Notification(val title: String, val message: String, val time: String) : AllModels()
+    data class QrTable(val have_table:Boolean, val filial:String, val table:Int)
+
+    data class Notification(val id: Int, val title: String, val description: String, val date:String, val time:String) : AllModels()
 
     data class JWT_token(val refresh: String, val access: String)
+
+    data class UserData(val number:Int, val password:String, val first_name: String, val birthDate:String)
 
 }

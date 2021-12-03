@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NeoCafeTeae1Prototype</string>
+    <string name="app_name">NeoCafe</string>
     <string name="vhod">Вход</string>
     <string name="name_registation_number">Имя</string>
     <string name="telephone_number_registation">Номер тел</string>
@@ -60,4 +60,5 @@
     <string name="Bonus">Бонусы:</string>
     <string name="date_format">MM/dd/yyyy</string>
     <string name="hour_format">HH:mm</string>
+    <string name="booked">Был забронирован вами, желаем приятного отдыха</string>
 </resources>

@@ -6,18 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import com.example.neocafeteae1prototype.data.local.LocalDatabase
 import com.example.neocafeteae1prototype.databinding.FragmentUserBinding
 import com.example.neocafeteae1prototype.view.root.BaseFragment
 import com.example.neocafeteae1prototype.view.tools.alert_dialog.CustomAlertDialog
+import com.example.neocafeteae1prototype.view.tools.navigate
 import com.example.neocafeteae1prototype.view.tools.notVisible
 import com.example.neocafeteae1prototype.view_model.user_vm.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class UserFragment : BaseFragment<FragmentUserBinding>() {
 
     private val viewModel by viewModels<UserViewModel>()
+    @Inject
+    lateinit var localDatabase: LocalDatabase
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,6 +51,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>() {
 
     private fun deleteAccount() {
         FirebaseAuth.getInstance().signOut()
+        localDatabase.clearData()
         activity?.finish()
     }
 
@@ -60,7 +66,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>() {
                     .show(childFragmentManager, "TAG")
             }
         }
-        binding.shoppingHistory.setOnClickListener { navController.navigate(UserFragmentDirections.actionUserFragmentToUserShoppingHistory())
+        binding.shoppingHistory.setOnClickListener { navigate(UserFragmentDirections.actionUserFragmentToUserShoppingHistory())
         }
     }
 
@@ -69,7 +75,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>() {
     }
 
     override fun setUpToolbar() {
-        binding.include.notification.setOnClickListener { navController.navigate(UserFragmentDirections.actionUserFragmentToNotification5()) }
+        binding.include.notification.setOnClickListener { navigate(UserFragmentDirections.actionUserFragmentToNotification5()) }
     }
 }
 

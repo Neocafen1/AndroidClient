@@ -19,7 +19,11 @@
             app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_branchFragment_to_notification2"
-            app:destination="@id/notification2" />
+            app:destination="@id/notification2"
+            app:enterAnim="@anim/up_in"
+            app:exitAnim="@anim/down_in"
+            app:popEnterAnim="@anim/up_in"
+            app:popExitAnim="@anim/down_in" />
     </fragment>
     <fragment
         android:id="@+id/branchesDetailFragment"
@@ -29,7 +33,10 @@
         <action
             android:id="@+id/action_branchesDetailFragment_to_notification2"
             app:destination="@id/notification2"
-            app:enterAnim="@anim/fade_in" />
+            app:enterAnim="@anim/up_in"
+            app:exitAnim="@anim/down_in"
+            app:popEnterAnim="@anim/up_in"
+            app:popExitAnim="@anim/down_in" />
         <argument
             android:name="model"
             app:argType="com.example.neocafeteae1prototype.data.models.AllModels$Filial" />
